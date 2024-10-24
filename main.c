@@ -38,15 +38,11 @@ void cadastra_produto(Lista *Lista_Prod)
 int main()
 {
   setlocale(LC_ALL, "");
-  // Menu inicial
   printf("Caro usuário, suas opções são:\n\t1)  cadastrar um produto\n\t2)  listar produtos e lances\n\t3)  dar um lance\n\t4)  listar outros produtos para lances\n\t5)  encerrar leilão\n\n");
 
   int comando;
-
-  
   int cont_cadastros = 0;
 
-  // Menu
   do
   {
     printf("O que deseja fazer? ");
@@ -55,7 +51,7 @@ int main()
     {
     case 1: // cadastra um produto
       printf("Resposta: 1\n");
-      //cadastra
+
       Lista *Lista_Prod = lista_init();
       cadastra_produto(Lista_Prod);
       cont_cadastros++;
@@ -70,7 +66,7 @@ int main()
       }
       else
       {
-        //lista_print
+        lista_print(Lista_Prod);
         printf("Listagem completa\n");
       }
       printf("\n");
@@ -91,7 +87,6 @@ int main()
       char aux_produto[50];
       scanf("%s", aux_produto);
 
-      //dar_lance
       printf("\n");
       break;
 

@@ -49,22 +49,24 @@ ListaBloco *lista_pop(Lista *lista)
     }
 }
 
-void lista_print(Lista *lista)
+void lista_print(Lista *lista) //está printando apenas o ultimo elemento da lista
 {
-    Lista *aux = lista_init();
-    while (!lista_vazia(lista))
-    {
-        elem valor = lista_pop(lista);
-        printf("%s", valor);
-        push(aux, valor);
+    if (lista_vazia(lista)) {
+        printf("Lista vazia.\n");
+        return;
     }
-    while (!esta_vazia(aux))
+
+    ListaBloco *bloco = lista->inicio; // Começa pelo início da lista
+
+    while (bloco != NULL) 
     {
-        lista_push(lista, lista_pop(aux));
+        elem_lista *valor = bloco->dado;
+        printf("%s\n", valor); // Imprime o valor atual
+        bloco = bloco->proximo; // Avança para o próximo bloco
     }
 }
 
-void lista_push(Lista *lista, elem *dado)
+void lista_push(Lista *lista, elem_lista *dado)
 {
     ListaBloco *Lista_bloco = (ListaBloco *)malloc(sizeof(ListaBloco));
     assert(Lista_bloco != NULL);

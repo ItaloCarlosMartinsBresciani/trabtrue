@@ -5,7 +5,7 @@
 #include "fila.h"
 #include "pilha.h"
 
-typedef char elem;
+typedef char elem_lista;
 
 typedef struct ListaBloco
 {
@@ -13,7 +13,7 @@ typedef struct ListaBloco
     struct ListaBloco *anterior;
     Fila *fila;
     Pilha *pilha;
-    elem *dado;
+    elem_lista *dado;
 } ListaBloco;
 
 typedef struct Lista
@@ -23,10 +23,12 @@ typedef struct Lista
 } Lista;
 
 Lista *lista_init();
-void lista_push(Lista *lista, elem *dado);
+void lista_push(Lista *lista, elem_lista *dado);
 ListaBloco *lista_pop(Lista *lista);
 bool lista_vazia(Lista *lista);
 // void lista_print_inv(Lista *lista);
 void lista_print(Lista *lista);
+//lista_libera
+//lista_verifica_elem
 
 #endif

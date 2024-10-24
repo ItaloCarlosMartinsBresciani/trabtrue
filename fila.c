@@ -8,7 +8,7 @@ Fila *fila_init()
     Fila *f = (Fila *)malloc(sizeof(Fila));
     if (f != NULL)
     {
-        return;
+        return NULL;
     }
     f->inicio = NULL;
     f->fim = NULL;
@@ -24,17 +24,17 @@ int fila_vazia(Fila *f)
     else
         return 0;
 }
-void fila_push(Fila *f, elem *dado)
+void fila_push(Fila *f, elem_fila *dado)
 {
     if (f != NULL)
     { // se a fila existir
         FilaBloco *p = (FilaBloco *)malloc(sizeof(FilaBloco));
         if (p != NULL)
         {
-            p->dado = (elem *)malloc(sizeof(elem));
+            p->dado = (elem_fila *)malloc(sizeof(elem_fila));
             if (p->dado != NULL)
             {
-                memcpy(p->dado, dado, sizeof(elem));
+                memcpy(p->dado, dado, sizeof(elem_fila));
             }
 
             if (f->inicio == NULL)
@@ -47,7 +47,7 @@ void fila_push(Fila *f, elem *dado)
                 FilaBloco *temp = f->inicio;
                 while (temp->proximo != NULL)
                 {
-                    temp = temp->proximo
+                    temp = temp->proximo;
                 }
                 temp->proximo = p;
                 p->proximo = NULL;
@@ -56,12 +56,12 @@ void fila_push(Fila *f, elem *dado)
         }
         else
         {
-            return;
+            return NULL;
         }
     }
     else
     {
-        return;
+        return NULL;
     }
 }
 FilaBloco *fila_pop(Fila *f)
@@ -75,10 +75,10 @@ FilaBloco *fila_pop(Fila *f)
     }
     else
     {
-        return;
+        return NULL;
     }
 }
-void fila_print(Fila *fila)
+void fila_print(Fila *f)
 {
     if (f != NULL || f->inicio != NULL)
     {
@@ -88,14 +88,14 @@ void fila_print(Fila *fila)
             printf("%s ", p->dado);
             p = p->proximo;
         }
-        printf("\n";)
+        printf("\n");
     }
 }
 void fila_libera(Fila *f)
 {
     if (f == NULL)
     {
-        return;
+        return NULL;
     }
     FilaBloco *p = f->inicio;
     while (p != NULL)
@@ -107,16 +107,19 @@ void fila_libera(Fila *f)
     }
     free(f);
 }
-/*int fila_verifica_elem(Fila *f, elem *dado){
-    if (f==NULL || f->inicio==NULL){
-     return;
+int fila_verifica_elem(Fila *f, elem_fila *dado)
+{
+    if (f == NULL || f->inicio == NULL)
+    {
+        return NULL;
     }
-    FilaBloco *p=f->inicio;
+    FilaBloco *p = f->inicio;
 
-    while(p!=NULL){
-        if (strcmp(p->dado, dado)==0) return 1;
-        p=p->proximo;
+    while (p != NULL)
+    {
+        if (strcmp(p->dado, dado) == 0)
+            return 1;
+        p = p->proximo;
     }
-
-    }
-*/
+    return 0;
+}

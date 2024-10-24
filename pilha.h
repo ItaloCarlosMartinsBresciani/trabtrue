@@ -4,11 +4,11 @@
 #include "fila.h"
 #include <stdbool.h>
 
-typedef char elem;
+typedef float elem_pilha;
 
 typedef struct PilhaBloco{
   struct PilhaBloco *anterior;
-  elem dado;
+  elem_pilha dado;
 }PilhaBloco;
 
 typedef struct pilha{
@@ -17,8 +17,10 @@ typedef struct pilha{
 
 Pilha *pilha_init();
 bool pilha_vazia(Pilha *pilha);
-void pilha_push(Pilha *pilha, elem *dado);
+void pilha_push(Pilha *pilha, elem_pilha *dado);
 void pilha_print(Pilha *pilha);
+//pilha_libera
+//pilha_verifica_elem
 
 
 #endif

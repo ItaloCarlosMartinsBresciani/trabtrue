@@ -23,7 +23,7 @@ bool pilha_vazia(Pilha *pilha)
   }
 }
 
-void pilha_push(Pilha *pilha, elem *dado)
+void pilha_push(Pilha *pilha, elem_pilha *dado)
 {
   PilhaBloco *bloco = (PilhaBloco *)malloc(sizeof(PilhaBloco));
   if (bloco == NULL)
@@ -55,7 +55,7 @@ PilhaBloco *pilha_pop(Pilha *pilha)
   }
   else
   {
-    return NULL;
+    return;
   }
 }
 

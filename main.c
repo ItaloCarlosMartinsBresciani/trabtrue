@@ -5,26 +5,28 @@
 #include <locale.h>
 #include <string.h>
 #include <stdlib.h>
-//  Protótipos das funções
-// void cadastra(/*lista de produtos, nome do produto);
+
+/* Protótipos das funções */  
+void cadastra_produto(Lista *Lista_Prod);
+void dar_lance(Lista *Lista_Prod);
 // void lista_produtos(/*lista de produtos...(?));
-// void dar_lance(/*lista de produtos...(?));
 // void avisa_usuario(/*lista de produtos...(?));
-// void encerra(/*lista de produtos...(?));
+// void encerra(/*lista de produtos...(?)); 
 
 void cadastra_produto(Lista *Lista_Prod)
 {
-  printf("Entre com o nome do produto:");
+  printf("Entre com o nome do produto: ");
   char nome[50];
   scanf("%s", nome);
-  
-  char *produto = malloc(strlen(nome) + 1);  
-  if (produto == NULL) {
+
+  char *produto = malloc(strlen(nome) + 1);
+  if (produto == NULL)
+  {
     printf("Erro ao alocar memória!\n");
     return;
   }
   strcpy(produto, nome);
-  
+
   lista_push(Lista_Prod, produto);
   printf("Produto cadastrado com sucesso!\n");
 }
@@ -35,7 +37,7 @@ void dar_lance(Lista *Lista_Prod)
   char aux_nome[50];
   scanf("%s", aux_nome);
 
-  printf("Entre com o valor do lance: ");
+  printf("Entre com o valor do lance: R$ ");
   float aux_lance;
   scanf("%f", &aux_lance);
 
@@ -43,26 +45,33 @@ void dar_lance(Lista *Lista_Prod)
   char aux_produto[50];
   scanf("%s", aux_produto);
 
-
   ListaBloco *lance = lista_verifica_elem(Lista_Prod, aux_produto);
-
-
-
   if (lance == NULL)
   {
     printf("Produto não encontrado\n");
   }
   else
   {
-    //if (lance->pilha->topo->dado < aux_lance){
+    if (pilha_vazia(lance->pilha) == true)
+    {
       pilha_push(lance->pilha, &aux_lance, aux_nome);
       printf("Lance cadastrado com sucesso!\n");
-    // }else{
-    //   printf("Seu lance pelo produto %s não foi aceito. Você precisa dar um lance maior!\n", aux_produto);
-    // }
-    //aaa
-  }
+    }
+    else
+    {
+      if (lance->pilha->topo->dado <= aux_lance)
+      {
+        pilha_push(lance->pilha, &aux_lance, aux_nome);
+        printf("Lance cadastrado com sucesso!\n");
+      }
+      else
+      {
+        printf("Seu lance pelo produto %s não foi aceito. Você precisa dar um lance maior!\n", aux_produto);
+      }
+    }
 
+    
+  }
 
   printf("\n");
 }
@@ -74,7 +83,7 @@ int main()
 
   int comando;
   int cont_cadastros = 0;
-  
+
   Lista *Lista_Prod = lista_init();
   do
   {

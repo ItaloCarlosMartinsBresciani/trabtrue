@@ -79,9 +79,15 @@ void fila_print(Fila *f)
     }
 
     FilaBloco *p = f->inicio;
+    
     while (p != NULL)
-    {
-        printf("%s ", p->dado);
+    {        
+        if (p->proximo == f->fim){
+            printf("%s ", p->dado);
+        }else{
+            printf("%s, ", p->dado);
+        }
+        
         p = p->proximo;
     }
     printf("\n");

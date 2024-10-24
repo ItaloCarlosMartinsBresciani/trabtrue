@@ -37,8 +37,8 @@ void pilha_push(Pilha *pilha, elem_pilha *dado)
     pilha->topo = bloco;
     bloco->anterior = NULL;
   }
-  else if (pilha->topo->dado < (*dado))
-  {
+  else if (pilha->topo->dado < (*dado)) //só empilha se o lance for maior que o topo
+  { 
     bloco->anterior = pilha->topo;
     pilha->topo = bloco;
   }
@@ -83,7 +83,7 @@ void pilha_libera(Pilha *pilha)
   free(pilha);
 }
 
-void pilha_print_topo(Pilha *pilha)
+Pilha *pilha_print_topo(Pilha *pilha)
 {
-  if (!pilha_vazia(pilha)) printf("%f\n", pilha->topo->dado);
+  if (!pilha_vazia(pilha)) return pilha->topo->dado;
 }

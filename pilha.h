@@ -23,5 +23,5 @@ PilhaBloco *pilha_pop(Pilha *pilha);
 void pilha_print(Pilha *pilha);
 void pilha_libera(Pilha *pilha);
 //pilha_verifica_elem
-void pilha_print_topo(Pilha *pilha);
+Pilha *pilha_print_topo(Pilha *pilha);
 #endif

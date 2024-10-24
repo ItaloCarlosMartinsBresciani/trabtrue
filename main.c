@@ -9,15 +9,13 @@
 /* Protótipos das funções */
 void cadastra_produto(Lista *Lista_Prod);
 void dar_lance(Lista *Lista_Prod, Fila *fila_usuario);
-// void lista_produtos(/*lista de produtos...(?));
+void lista_produtos(Lista *Lista_Prod);
 // void avisa_usuario(/*lista de produtos...(?));
 void encerra(Lista *Lista_Prod);
-
+void libera_mem(Lista *Lista_Prod);
 
 /*void avisa_usuario(Lista *Lista_Prod)
 {
-ListaBloco *l = Lista_Prod->inicio;
-PilhaBloco *l = pilha_print_topo(Lista_Prod->inicio->pilha);
 
 
 }*/
@@ -69,7 +67,6 @@ void dar_lance(Lista *Lista_Prod, Fila *fila_usuario)
     else
     {
       PilhaBloco *n = pilha_print_topo(lance->pilha);
-      // if (lance->pilha->topo->dado <= aux_lance)
       if (n->dado <= aux_lance)
       {
         pilha_push(lance->pilha, &aux_lance, aux_nome);
@@ -83,6 +80,43 @@ void dar_lance(Lista *Lista_Prod, Fila *fila_usuario)
   }
 
   printf("\n");
+}
+
+void lista_produtos(Lista *Lista_Prod)
+{
+  ListaBloco *aux_lista = Lista_Prod->inicio; //
+  while (aux_lista != NULL)
+  {
+    printf("\t");
+    lista_bloco_print(aux_lista); // printa o produto (bloco da lista de produtos)
+    printf("\n");
+    PilhaBloco *aux_pilha = pilha_print_topo(aux_lista->pilha);
+
+    while (aux_pilha != NULL)
+    {
+      if (aux_pilha->fila->total > 1)
+        printf("\t\t%d lances de R$", aux_pilha->fila->total);
+      else
+      {
+        printf("\t\t%d lance de R$", aux_pilha->fila->total);
+      }
+      pilha_bloco_print(aux_pilha); // printa o valor do produto (elemento do bloco da pilha)
+      printf(": ");
+      FilaBloco *aux_fila = aux_pilha->fila->inicio;
+      while (aux_fila != NULL)
+      {
+        fila_bloco_print(aux_fila); // printa o nome do usuario na fila
+        if (aux_fila->proximo != NULL)
+        {
+          printf(", ");
+        }
+        aux_fila = aux_fila->proximo;
+      }
+      aux_pilha = aux_pilha->anterior;
+      printf("\n");
+    }
+    aux_lista = aux_lista->proximo;
+  }
 }
 
 void encerra(Lista *Lista_Prod)
@@ -104,9 +138,29 @@ void encerra(Lista *Lista_Prod)
       printf("Nenhum lance foi dado para esse produto.\n");
     }
     aux = aux->proximo;
-    
   }
   printf("Leilão encerrado.\n");
+}
+
+void libera_mem(Lista *Lista_Prod)
+{
+  ListaBloco *l = Lista_Prod->inicio;
+  while (l != NULL)
+  {
+    Pilha *p = l->pilha;
+    PilhaBloco *t = pilha_print_topo(l->pilha);
+
+    while (t != NULL)
+    {
+      Fila *f = t->fila;
+      fila_libera(f);  
+      t = t->anterior; 
+    }
+    pilha_libera(p); 
+                
+    l = l->proximo;                   
+  }
+  lista_libera(Lista_Prod); 
 }
 
 int main()
@@ -140,35 +194,7 @@ int main()
       }
       else
       {
-        ListaBloco *aux_lista = Lista_Prod->inicio; //
-        while (aux_lista != NULL)
-        {
-          printf("\t");
-          lista_bloco_print(aux_lista); // printa o produto (bloco da lista de produtos)
-          printf("\n");
-          PilhaBloco *aux_pilha = aux_lista->pilha->topo;
-
-          while (aux_pilha != NULL)
-          {
-            printf("\t\t%d lance(s) de R$", aux_pilha->fila->total);
-            pilha_bloco_print(aux_pilha); // printa o valor do produto (elemento do bloco da pilha)
-            printf(": ");
-            FilaBloco *aux_fila = aux_pilha->fila->inicio;
-            while (aux_fila != NULL)
-            {
-              fila_bloco_print(aux_fila); // printa o nome do usuario na fila
-              if(aux_fila->proximo != NULL){
-                printf(", ");
-              }
-              aux_fila = aux_fila->proximo;
-            }
-            aux_pilha = aux_pilha->anterior;
-            printf("\n");
-          }
-          aux_lista = aux_lista->proximo;
-        }
-
-        // lista_print(Lista_Prod);
+        lista_produtos(Lista_Prod);
         printf("Listagem completa\n");
       }
       printf("\n");
@@ -197,6 +223,10 @@ int main()
       break;
     }
   } while (comando != 5);
+
+
+  libera_mem(Lista_Prod);
+  fila_libera(fila_usuario);
 
   return 0;
 }

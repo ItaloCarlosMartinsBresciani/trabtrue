@@ -43,6 +43,9 @@ void dar_lance(Lista *Lista_Prod)
   char aux_produto[50];
   scanf("%s", aux_produto);
 
+  
+
+
   printf("\n");
   
   

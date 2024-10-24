@@ -71,17 +71,21 @@ FilaBloco *fila_pop(Fila *f)
 }
 void fila_print(Fila *f)
 {
-    if (f != NULL || f->inicio != NULL)
+    if (f == NULL || f->inicio == NULL) // Corrigido para usar '&&'
     {
-        FilaBloco *p = f->inicio;
-        while (p != NULL)
-        {
-            printf("%s ", p->dado);
-            p = p->proximo;
-        }
-        printf("\n");
+        printf("Fila vazia ou nula.\n");
+        return;
     }
+
+    FilaBloco *p = f->inicio;
+    while (p != NULL)
+    {
+        printf("%s ", p->dado);
+        p = p->proximo;
+    }
+    printf("\n");
 }
+
 void fila_libera(Fila *f)
 {
     if (f != NULL)

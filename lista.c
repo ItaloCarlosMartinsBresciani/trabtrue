@@ -71,8 +71,10 @@ void lista_push(Lista *lista, elem_lista *dado)
     assert(Lista_bloco != NULL);
 
     Lista_bloco->dado = dado;
-    Pilha *P;
-    Lista_bloco->pilha = P;     
+    Pilha *P = pilha_init();
+    Lista_bloco->pilha = P;
+  
+
     ListaBloco *aux, *ant;
     aux = lista->inicio;
     ant = NULL;
@@ -119,3 +121,16 @@ void lista_libera(Lista *lista)
 
     free(lista); // Libera a lista após liberar todos os blocos
 }
+ListaBloco *lista_verifica_elem(Lista *lista, elem_lista *dado) {
+    if (!lista_vazia(lista)) {
+        ListaBloco *no = lista->inicio;
+        while (no != NULL) {
+            if (strcmp(no->dado, dado) == 0) {
+                return no;
+            }
+            no = no->proximo;
+        }
+    }
+    return NULL;
+}
+

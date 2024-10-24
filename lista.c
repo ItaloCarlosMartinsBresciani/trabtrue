@@ -60,7 +60,8 @@ void lista_print(Lista *lista)
 
     while (bloco != NULL)
     {
-        printf("%s\n", bloco->dado);  
+        printf("\t%s\n", bloco->dado);
+        pilha_print(bloco->pilha);  
         bloco = bloco->proximo;       
     }
 }
@@ -68,7 +69,6 @@ void lista_print(Lista *lista)
 void lista_push(Lista *lista, elem_lista *dado)
 {
     ListaBloco *Lista_bloco = (ListaBloco *)malloc(sizeof(ListaBloco));
-    assert(Lista_bloco != NULL);
 
     Lista_bloco->dado = dado;
     Pilha *P = pilha_init();

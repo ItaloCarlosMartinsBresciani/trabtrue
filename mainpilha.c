@@ -1,15 +1,19 @@
-#include <stdio.h>
+#include "lista.h"
 #include "pilha.h"
+#include "fila.h"
+#include <stdio.h>
+#include <locale.h>
+#include <string.h>
+#include <stdlib.h>
 
 int main(){
 
 Pilha *p = pilha_init();
-float val1 = 100.1f;
-float val2 = 250.5f;
-float val3 = 300.6f;
-float val4 = 500.7f;
-
-float val5 = 500.7f;
+float val1 = 100.1;
+float val2 = 250.5;
+float val3 = 300.6;
+float val4 = 500.7;
+float val5 = 500.7;
 char nome1[50] = "luiz";
 char nome2[50] = "pedro";
 char nome3[50] = "rita";
@@ -25,7 +29,8 @@ pilha_push(p, &val4, nome4);
 printf("segundo print:\n");
 pilha_print(p);
 printf("o topo é:\n");
-pilha_print_topo(p);
+PilhaBloco *topo = pilha_print_topo(p);
+printf("%f\n", topo->dado);
 pilha_push(p, &val5, nome5);
 printf("quarto print:\n");
 

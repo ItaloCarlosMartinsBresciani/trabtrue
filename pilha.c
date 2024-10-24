@@ -76,7 +76,8 @@ void pilha_print(Pilha *pilha)
     // FilaBloco *aux2 = aux->fila->inicio;
     while (aux != NULL)
     {
-      printf("%f pessoas:\n", aux->dado);
+      printf("\t\t%d lance de R$", aux->fila->total);//total de lançes
+      printf("%.2f: ", aux->dado);
       fila_print(aux->fila);
       //while (aux2 != NULL)
       //{

@@ -1,4 +1,4 @@
-#include "bloco.h"
+
 #include "pilha.h"
 #include "lista.h"
 #include <stdio.h>
@@ -25,44 +25,15 @@ void cadastra_produto(Lista *Lista_Prod)
   }
   strcpy(produto, nome);
   
-  lista_push(Lista_Prod, produto, strlen(produto) + 1);
+  lista_push(Lista_Prod, produto);
   printf("Produto cadastrado com sucesso!\n");
 }
 
-void dar_lance(Lista *Lista_Prod, char *nome, float valor, char *produto)
-{
-  ListaBloco *aux = Lista_Prod->inicio;
-  while (aux != NULL)
-  {
-    if (strcmp(aux->bloco->dado, produto) == 0)
-    {
-      if (pilha_vazia(aux->pilha))
-      {
-        pilha_push(aux->pilha, &valor, sizeof(float), nome);
-      }
-      else
-      {
-        if (atof(aux->pilha->topo->bloco->dado) > valor)
-        {
-          printf("Seu lance pela %s não foi aceito. Você precisa dar um lance maior!", produto);
-          return;
-        }
-        else if (atof(aux->pilha->topo->bloco->dado) == valor)
-        {
-          fila_push(aux->pilha->topo->fila, nome, strlen(nome) + 1);
-        }
-        else if(atof(aux->pilha->topo->bloco->dado) < valor)
-        {
-          pilha_push(aux->pilha, &valor, sizeof(float), nome);
-        }
-      }
-      printf("Lance cadastrado com sucesso!\n");
-      return;
-    }
-    aux = aux->proximo;
-  }
-  printf("Produto não encontrado\n");
-}
+// void dar_lance(Lista *Lista_Prod, char *nome, float valor, char *produto)
+// {
+  
+  
+// }
 
 int main()
 {
@@ -72,8 +43,7 @@ int main()
 
   int comando;
 
-  Lista Lista_Prod;
-  lista_init(&Lista_Prod);
+  
   int cont_cadastros = 0;
 
   // Menu
@@ -85,7 +55,9 @@ int main()
     {
     case 1: // cadastra um produto
       printf("Resposta: 1\n");
-      cadastra_produto(&Lista_Prod);
+      //cadastra
+      Lista *Lista_Prod = lista_init();
+      cadastra_produto(Lista_Prod);
       cont_cadastros++;
       printf("\n");
       break;
@@ -98,7 +70,7 @@ int main()
       }
       else
       {
-        lista_print(&Lista_Prod);
+        //lista_print
         printf("Listagem completa\n");
       }
       printf("\n");
@@ -119,7 +91,7 @@ int main()
       char aux_produto[50];
       scanf("%s", aux_produto);
 
-      dar_lance(&Lista_Prod, aux_nome, aux_lance, aux_produto);
+      //dar_lance
       printf("\n");
       break;
 

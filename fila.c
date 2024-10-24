@@ -1,74 +1,121 @@
-#include <stdio.h>
 #include "fila.h"
-#include "bloco.h"
 #include <stdlib.h>
-#include <assert.h>
-#include "pilha.h"
+#include <stdio.h>
+#include <string.h>
 
-void fila_init(Fila *fila){
-    fila->inicio=NULL;
-    fila->fim=NULL;
-    fila->total=0;
+Fila *fila_init()
+{
+    Fila *f = (Fila *)malloc(sizeof(Fila));
+    if (f != NULL)
+    {
+        return;
+    }
+    f->inicio = NULL;
+    f->fim = NULL;
+    f->total = 0;
+    return f;
 }
-
-int fila_vazia(Fila *fila){
-    if (fila->total==0)
+int fila_vazia(Fila *f)
+{
+    if (f->inicio == NULL)
+    {
         return 1;
-    return 0;
-}
-void fila_push(Fila *fila, void *dado, unsigned long tamanho) {
-
-    Bloco *bloco = bloco_alocar(dado, tamanho);
-    assert(bloco!=NULL);
-    FilaBloco *fila_bloco=malloc(sizeof(FilaBloco));
-    assert(fila_bloco!=NULL);
-    fila_bloco->bloco=bloco;
-        
-    if (fila_vazia(fila)) {
-        fila->inicio = fila_bloco;
-    } else {
-        fila->fim->proximo = fila_bloco;
     }
-
-    fila->fim = fila_bloco;
-    fila->fim->proximo = NULL;
-    fila->total++;
-    
-    
+    else
+        return 0;
 }
+void fila_push(Fila *f, elem *dado)
+{
+    if (f != NULL)
+    { // se a fila existir
+        FilaBloco *p = (FilaBloco *)malloc(sizeof(FilaBloco));
+        if (p != NULL)
+        {
+            p->dado = (elem *)malloc(sizeof(elem));
+            if (p->dado != NULL)
+            {
+                memcpy(p->dado, dado, sizeof(elem));
+            }
 
-FilaBloco *fila_pop(Fila *fila) {
-
-    if (!fila_vazia(fila)){
-        FilaBloco *aux = fila->inicio;
-        if (fila->inicio == fila->fim){
-            fila->inicio = NULL;
-            fila->fim = NULL;
-        }else{
-            fila->inicio = fila->inicio->proximo;
+            if (f->inicio == NULL)
+            {
+                f->inicio = p;
+                p->proximo = NULL;
+            }
+            else
+            {
+                FilaBloco *temp = f->inicio;
+                while (temp->proximo != NULL)
+                {
+                    temp = temp->proximo
+                }
+                temp->proximo = p;
+                p->proximo = NULL;
+            }
+            f->total++;
         }
-        return aux;
-    } 
-}
-void fila_print(Fila *fila){
-    if (!fila_vazia(fila)){
-        FilaBloco *aux=fila->inicio;
-        while (aux!=NULL){
-        printf("%s\n", aux->bloco->dado);
-        aux=aux->proximo;
+        else
+        {
+            return;
         }
     }
+    else
+    {
+        return;
+    }
 }
-// int empty(Fila *fila) { 
-//     if (!isempty(fila)) {
-//         while (!isempty(fila)) {
-//             Bloco *bloco;
-//             remover(fila, bloco);  
-//         }
-//         fila->inicio = NULL;
-//         fila->fim = NULL;
-//         fila->total = 0;
-//         return 1;  
-//     }
-//     return 0;  
-// }
+FilaBloco *fila_pop(Fila *f)
+{
+    if (f != NULL || f->inicio != NULL)
+    {
+        FilaBloco *p = f->inicio;
+        f->inicio = p->proximo;
+        f->total--;
+        return p;
+    }
+    else
+    {
+        return;
+    }
+}
+void fila_print(Fila *fila)
+{
+    if (f != NULL || f->inicio != NULL)
+    {
+        FilaBloco *p = f->inicio;
+        while (p != NULL)
+        {
+            printf("%s ", p->dado);
+            p = p->proximo;
+        }
+        printf("\n";)
+    }
+}
+void fila_libera(Fila *f)
+{
+    if (f == NULL)
+    {
+        return;
+    }
+    FilaBloco *p = f->inicio;
+    while (p != NULL)
+    {
+        FilaBloco *prox = p->proximo;
+        free(p->dado);
+        free(p);
+        p = prox;
+    }
+    free(f);
+}
+/*int fila_verifica_elem(Fila *f, elem *dado){
+    if (f==NULL || f->inicio==NULL){
+     return;
+    }
+    FilaBloco *p=f->inicio;
+
+    while(p!=NULL){
+        if (strcmp(p->dado, dado)==0) return 1;
+    }
+
+    }
+*/

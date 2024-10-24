@@ -1,12 +1,10 @@
 #ifndef FILA_H
 #define FILA_H
 
-//filas (de usuários que deram cada lance, por produto)
-#include "bloco.h"
-
+typedef char elem;
 typedef struct FilaBloco{
     struct FilaBloco *proximo; 
-    Bloco *bloco;
+    elem *dado;
 }FilaBloco;
 
 typedef struct{
@@ -14,10 +12,13 @@ typedef struct{
     int total;
 }Fila;
 
-void fila_init(Fila *fila);
+Fila* fila_init();
 int fila_vazia(Fila *f);
-void fila_push(Fila *f, void *dado, unsigned long tamanho);
+void fila_push(Fila *f, elem *dado);
 FilaBloco *fila_pop(Fila *f);
 void fila_print(Fila *fila);
+//int fila_verifica_elem(Fila*f, elem*dado);
+void fila_libera(Fila *f);
+
 
 #endif

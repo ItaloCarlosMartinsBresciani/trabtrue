@@ -4,9 +4,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-void pilha_init(Pilha *pilha)
+Pilha *pilha_init()
 {
+  Pilha *pilha = (Pilha *)malloc(sizeof(Pilha));
   pilha->topo = NULL;
+  return pilha;
 }
 
 bool pilha_vazia(Pilha *pilha)
@@ -23,7 +25,7 @@ bool pilha_vazia(Pilha *pilha)
 
 void pilha_push(Pilha *pilha, elem *dado)
 {
-  Pilha_Bloco *bloco = (Pilha_Bloco *)malloc(sizeof(Pilha_Bloco));
+  PilhaBloco *bloco = (PilhaBloco *)malloc(sizeof(PilhaBloco));
   if (bloco == NULL)
   {
     // erro de alocação de memória
@@ -42,11 +44,11 @@ void pilha_push(Pilha *pilha, elem *dado)
   }
 }
 
-Pilha_Bloco *pilha_pop(Pilha *pilha)
+PilhaBloco *pilha_pop(Pilha *pilha)
 {
   if (pilha_vazia(pilha) == false)
   {
-    Pilha_Bloco *aux = pilha->topo;
+    PilhaBloco *aux = pilha->topo;
     pilha->topo = aux->anterior;
     aux->anterior = NULL;
     return aux;
@@ -67,7 +69,7 @@ void pilha_print(Pilha *pilha)
   }
   else
   {
-    Pilha_Bloco *aux = pilha->topo;
+    PilhaBloco *aux = pilha->topo;
     while (aux != NULL)
     {
       printf("%f\n", aux->dado); 

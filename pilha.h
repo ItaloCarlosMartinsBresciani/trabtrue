@@ -1,24 +1,21 @@
 #ifndef PILHA_H
 #define PILHA_H
 
+#include "fila.h"
 #include <stdbool.h>
-#include <stdbool.h>
-#include <stdlib.h>
-#include <string.h>
 
+typedef char elem;
 
-typedef float elem;
-
-typedef struct bloco{
-  struct bloco *anterior;
+typedef struct PilhaBloco{
+  struct PilhaBloco *anterior;
   elem dado;
-}Pilha_Bloco;
+}PilhaBloco;
 
 typedef struct pilha{
-  Pilha_Bloco *topo;
+  PilhaBloco *topo;
 }Pilha;
 
-void pilha_init(Pilha *pilha);
+Pilha *pilha_init();
 bool pilha_vazia(Pilha *pilha);
 void pilha_push(Pilha *pilha, elem *dado);
 void pilha_print(Pilha *pilha);

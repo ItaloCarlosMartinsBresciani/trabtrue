@@ -1,61 +1,77 @@
 #include "pilha.h"
-#include "bloco.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 
 void pilha_init(Pilha *pilha)
 {
   pilha->topo = NULL;
 }
 
-bool pilha_vazia(Pilha *pilha){
+bool pilha_vazia(Pilha *pilha)
+{
   if (pilha->topo == NULL)
   {
     return true;
-  }else{
+  }
+  else
+  {
     return false;
   }
 }
 
-
-void pilha_push(Pilha *pilha, void *dado, unsigned long tamanho, char *nome)
+void pilha_push(Pilha *pilha, elem *dado)
 {
-  Bloco *bloco = bloco_alocar(dado, tamanho);
-  assert(bloco!=NULL);
-
-  PilhaBloco *pilha_bloco = malloc(sizeof(PilhaBloco));
-  assert(pilha_bloco!=NULL);
-  Fila *F;
-  fila_init(F);
-
-  pilha_bloco->fila = F;
-  pilha_bloco->bloco = bloco;
-
-  memcpy(bloco->dado, dado, tamanho);
-  
-  if (pilha->topo != NULL)
+  Pilha_Bloco *bloco = (Pilha_Bloco *)malloc(sizeof(Pilha_Bloco));
+  if (bloco == NULL)
   {
-    pilha_bloco->anterior = pilha->topo;
+    // erro de alocação de memória
+    return;
+  }
+  bloco->dado = (*dado);
+  if (pilha_vazia(pilha))
+  {
+    pilha->topo = bloco;
+    bloco->anterior = NULL;
   }
   else
   {
-    pilha_bloco->anterior = NULL;
+    bloco->anterior = pilha->topo;
+    pilha->topo = bloco;
   }
-  pilha->topo = pilha_bloco;
-  fila_push(F, nome, strlen(nome)+1);
 }
 
-PilhaBloco *pilha_pop(Pilha *pilha)
+Pilha_Bloco *pilha_pop(Pilha *pilha)
 {
-  if (pilha_vazia(pilha) == false){
-    PilhaBloco *anterior = pilha->topo;
-    pilha->topo = pilha->topo->anterior;
-    anterior->anterior = NULL;
-    return anterior;
-  }else{
+  if (pilha_vazia(pilha) == false)
+  {
+    Pilha_Bloco *aux = pilha->topo;
+    pilha->topo = aux->anterior;
+    aux->anterior = NULL;
+    return aux;
+  }
+  else
+  {
     return NULL;
+  }
+}
+
+void pilha_print(Pilha *pilha)
+{
+  if (pilha_vazia(pilha))
+  {
+    // pilha vazia
+    printf("Pilha vazia!\n");
+    return;
+  }
+  else
+  {
+    Pilha_Bloco *aux = pilha->topo;
+    while (aux != NULL)
+    {
+      printf("%f\n", aux->dado); 
+      aux = aux->anterior;       
+    }
   }
 }

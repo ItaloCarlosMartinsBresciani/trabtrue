@@ -115,6 +115,7 @@ void fila_libera(Fila *f)
 
     while(p!=NULL){
         if (strcmp(p->dado, dado)==0) return 1;
+        p=p->proximo;
     }
 
     }

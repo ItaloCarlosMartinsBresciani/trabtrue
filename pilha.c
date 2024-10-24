@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "lista.h"
 
 Pilha *pilha_init(void)
 {
@@ -23,9 +24,11 @@ bool pilha_vazia(Pilha *pilha)
   }
 }
 
-void pilha_push(Pilha *pilha, elem_pilha *dado)
+void pilha_push(Pilha *pilha, elem_pilha *dado, elem_fila *nome)
 {
   PilhaBloco *bloco = (PilhaBloco *)malloc(sizeof(PilhaBloco));
+
+  Fila *fila;
   if (bloco == NULL)
   {
     // erro de alocação de memória
@@ -36,11 +39,21 @@ void pilha_push(Pilha *pilha, elem_pilha *dado)
   {
     pilha->topo = bloco;
     bloco->anterior = NULL;
+    fila = fila_init();
+    bloco->fila = fila;
+    fila_push(fila, nome);
   }
-  else if (pilha->topo->dado < (*dado)) //só empilha se o lance for maior que o topo
-  { 
+  else if (pilha->topo->dado == (*dado)) // se o lance for igual
+  {
+    fila_push(pilha->topo->fila, nome);
+  }
+  else if (pilha->topo->dado < (*dado)) // só empilha se o lance for maior que o topo
+  {
     bloco->anterior = pilha->topo;
     pilha->topo = bloco;
+    fila = fila_init();
+    bloco->fila = fila;
+    fila_push(fila, nome);
   }
 }
 
@@ -60,9 +73,16 @@ void pilha_print(Pilha *pilha)
   if (!pilha_vazia(pilha))
   {
     PilhaBloco *aux = pilha->topo;
+    // FilaBloco *aux2 = aux->fila->inicio;
     while (aux != NULL)
     {
-      printf("%f\n", aux->dado);
+      printf("%f pessoas:\n", aux->dado);
+      fila_print(aux->fila);
+      //while (aux2 != NULL)
+      //{
+      //  printf("%s\n", aux2->dado);
+      //  aux2 = aux2->proximo;
+      //}
       aux = aux->anterior;
     }
   }
@@ -83,7 +103,10 @@ void pilha_libera(Pilha *pilha)
   free(pilha);
 }
 
-Pilha *pilha_print_topo(Pilha *pilha)
+PilhaBloco *pilha_print_topo(Pilha *pilha)
 {
-  if (!pilha_vazia(pilha)) return pilha->topo->dado;
+  if (pilha_vazia(pilha) == false)
+  {
+    return pilha->topo;
+  }
 }

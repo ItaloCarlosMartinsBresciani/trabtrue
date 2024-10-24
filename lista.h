@@ -28,6 +28,6 @@ bool lista_vazia(Lista *lista);
 // void lista_print_inv(Lista *lista);
 void lista_print(Lista *lista);
 void lista_libera(Lista *lista);
-//lista_verifica_elem
+ListaBloco *lista_verifica_elem(Lista *lista, elem_lista *dado);
 
 #endif

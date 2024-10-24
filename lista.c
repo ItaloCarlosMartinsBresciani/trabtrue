@@ -71,7 +71,8 @@ void lista_push(Lista *lista, elem_lista *dado)
     assert(Lista_bloco != NULL);
 
     Lista_bloco->dado = dado;
-
+    Pilha *P;
+    Lista_bloco->pilha = P;     
     ListaBloco *aux, *ant;
     aux = lista->inicio;
     ant = NULL;

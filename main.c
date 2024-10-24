@@ -29,11 +29,24 @@ void cadastra_produto(Lista *Lista_Prod)
   printf("Produto cadastrado com sucesso!\n");
 }
 
-// void dar_lance(Lista *Lista_Prod, char *nome, float valor, char *produto)
-// {
+void dar_lance(Lista *Lista_Prod)
+{
+  printf("Entre com seu nome:");
+  char aux_nome[50];
+  scanf("%s", aux_nome);
+
+  printf("Entre com o valor do lance:");
+  float aux_lance;
+  scanf("%f", &aux_lance);
+
+  printf("Entre com o nome do produto:");
+  char aux_produto[50];
+  scanf("%s", aux_produto);
+
+  printf("\n");
   
   
-// }
+}
 
 int main()
 {
@@ -73,19 +86,7 @@ int main()
 
     case 3: // dá um lance em um produto
       printf("Resposta: 3\n");
-      // dar_lance();
-      printf("Entre com seu nome:");
-      char aux_nome[50];
-      scanf("%s", aux_nome);
-
-      printf("Entre com o valor do lance:");
-      float aux_lance;
-      scanf("%f", &aux_lance);
-
-      printf("Entre com o nome do produto:");
-      char aux_produto[50];
-      scanf("%s", aux_produto);
-
+      dar_lance(Lista_Prod);
       printf("\n");
       break;
 

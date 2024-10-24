@@ -42,7 +42,8 @@ int main()
 
   int comando;
   int cont_cadastros = 0;
-
+  
+  Lista *Lista_Prod = lista_init();
   do
   {
     printf("O que deseja fazer? ");
@@ -51,8 +52,6 @@ int main()
     {
     case 1: // cadastra um produto
       printf("Resposta: 1\n");
-
-      Lista *Lista_Prod = lista_init();
       cadastra_produto(Lista_Prod);
       cont_cadastros++;
       printf("\n");

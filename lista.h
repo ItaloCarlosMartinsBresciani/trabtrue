@@ -28,7 +28,7 @@ ListaBloco *lista_pop(Lista *lista);
 bool lista_vazia(Lista *lista);
 // void lista_print_inv(Lista *lista);
 void lista_print(Lista *lista);
-//lista_libera
+void lista_libera(Lista *lista);
 //lista_verifica_elem
 
 #endif

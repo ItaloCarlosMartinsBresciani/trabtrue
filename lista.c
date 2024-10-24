@@ -27,50 +27,50 @@ bool lista_vazia(Lista *lista)
 
 ListaBloco *lista_pop(Lista *lista)
 {
-    if (lista_vazia(lista) == true)
+    if (lista_vazia(lista))
     {
         return NULL;
     }
+    
+    ListaBloco *bloco_removido = lista->fim;
+
+    if (lista->inicio == lista->fim)
+    {
+        lista->inicio = NULL;
+        lista->fim = NULL;
+    }
     else
     {
-        ListaBloco *aux = lista->inicio;
-        if (lista->inicio == lista->fim)
-        {
-            lista->inicio = NULL;
-            lista->fim = NULL;
-        }
-        else
-        {
-            lista->inicio = lista->inicio->proximo;
-            lista->inicio->anterior = NULL;
-        }
-        // aux->pilha=NULL;
-        return aux;
+        lista->fim = lista->fim->anterior;
+        lista->fim->proximo = NULL;
     }
+
+    return bloco_removido;
 }
 
-void lista_print(Lista *lista) //está printando apenas o ultimo elemento da lista
+void lista_print(Lista *lista)
 {
-    if (lista_vazia(lista)) {
+    if (lista_vazia(lista))
+    {
         printf("Lista vazia.\n");
         return;
     }
 
-    ListaBloco *bloco = lista->inicio; // Começa pelo início da lista
+    ListaBloco *bloco = lista->inicio; 
 
-    while (bloco != NULL) 
+    while (bloco != NULL)
     {
-        elem_lista *valor = bloco->dado;
-        printf("%s\n", valor); // Imprime o valor atual
-        bloco = bloco->proximo; // Avança para o próximo bloco
+        printf("%s\n", bloco->dado);  
+        bloco = bloco->proximo;       
     }
 }
+
 
 void lista_push(Lista *lista, elem_lista *dado)
 {
     ListaBloco *Lista_bloco = (ListaBloco *)malloc(sizeof(ListaBloco));
     assert(Lista_bloco != NULL);
-
+    
     Lista_bloco->dado = dado;
 
     ListaBloco *aux, *ant;
@@ -104,4 +104,17 @@ void lista_push(Lista *lista, elem_lista *dado)
             lista->fim = Lista_bloco;
         Lista_bloco->anterior = ant;
     }
+}
+void lista_libera(Lista *lista)
+{
+    ListaBloco *bloco = lista->inicio;
+
+    while (bloco != NULL)
+    {
+        ListaBloco *prox = bloco->proximo;
+        free(bloco);
+        bloco = prox;
+    }
+
+    free(lista); // Libera a lista após liberar todos os blocos
 }

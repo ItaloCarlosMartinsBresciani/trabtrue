@@ -60,7 +60,7 @@ void dar_lance(Lista *Lista_Prod)
     // }else{
     //   printf("Seu lance pelo produto %s não foi aceito. Você precisa dar um lance maior!\n", aux_produto);
     // }
-    
+    //aaa
   }
 
 

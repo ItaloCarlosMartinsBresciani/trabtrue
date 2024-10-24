@@ -55,7 +55,7 @@ PilhaBloco *pilha_pop(Pilha *pilha)
   }
   else
   {
-    return;
+    return NULL;
   }
 }
 

@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-Pilha *pilha_init()
+Pilha *pilha_init(void)
 {
   Pilha *pilha = (Pilha *)malloc(sizeof(Pilha));
   pilha->topo = NULL;
@@ -37,7 +37,7 @@ void pilha_push(Pilha *pilha, elem_pilha *dado)
     pilha->topo = bloco;
     bloco->anterior = NULL;
   }
-  else
+  else if (pilha->topo->dado < (*dado))
   {
     bloco->anterior = pilha->topo;
     pilha->topo = bloco;
@@ -53,27 +53,37 @@ PilhaBloco *pilha_pop(Pilha *pilha)
     aux->anterior = NULL;
     return aux;
   }
-  else
-  {
-    return NULL;
-  }
 }
 
 void pilha_print(Pilha *pilha)
 {
-  if (pilha_vazia(pilha))
-  {
-    // pilha vazia
-    printf("Pilha vazia!\n");
-    return;
-  }
-  else
+  if (!pilha_vazia(pilha))
   {
     PilhaBloco *aux = pilha->topo;
     while (aux != NULL)
     {
-      printf("%f\n", aux->dado); 
-      aux = aux->anterior;       
+      printf("%f\n", aux->dado);
+      aux = aux->anterior;
     }
   }
+}
+void pilha_libera(Pilha *pilha)
+{
+  if (!pilha_vazia(pilha))
+  {
+    PilhaBloco *p = pilha->topo;
+    while (p != NULL)
+    {
+      PilhaBloco *temp = p;
+      p = p->anterior;
+      free(temp);
+    }
+    pilha->topo = NULL;
+  }
+  free(pilha);
+}
+
+void pilha_print_topo(Pilha *pilha)
+{
+  if (!pilha_vazia(pilha)) printf("%f\n", pilha->topo->dado);
 }

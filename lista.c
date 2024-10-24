@@ -133,4 +133,3 @@ ListaBloco *lista_verifica_elem(Lista *lista, elem_lista *dado) {
     }
     return NULL;
 }
-

@@ -1,5 +1,10 @@
-#include <stdio.h>
 #include "lista.h"
+#include "pilha.h"
+#include "fila.h"
+#include <stdio.h>
+#include <locale.h>
+#include <string.h>
+#include <stdlib.h>
 
 int main(){
 

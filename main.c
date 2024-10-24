@@ -1,6 +1,6 @@
-
-#include "pilha.h"
 #include "lista.h"
+#include "pilha.h"
+#include "fila.h"
 #include <stdio.h>
 #include <locale.h>
 #include <string.h>
@@ -31,24 +31,40 @@ void cadastra_produto(Lista *Lista_Prod)
 
 void dar_lance(Lista *Lista_Prod)
 {
-  printf("Entre com seu nome:");
+  printf("Entre com seu nome: ");
   char aux_nome[50];
   scanf("%s", aux_nome);
 
-  printf("Entre com o valor do lance:");
+  printf("Entre com o valor do lance: ");
   float aux_lance;
   scanf("%f", &aux_lance);
 
-  printf("Entre com o nome do produto:");
+  printf("Entre com o nome do produto: ");
   char aux_produto[50];
   scanf("%s", aux_produto);
 
-  
+
+  ListaBloco *lance = lista_verifica_elem(Lista_Prod, aux_produto);
+
+
+
+  if (lance == NULL)
+  {
+    printf("Produto não encontrado\n");
+  }
+  else
+  {
+    //if (lance->pilha->topo->dado < aux_lance){
+      pilha_push(lance->pilha, &aux_lance, aux_nome);
+      printf("Lance cadastrado com sucesso!\n");
+    // }else{
+    //   printf("Seu lance pelo produto %s não foi aceito. Você precisa dar um lance maior!\n", aux_produto);
+    // }
+    
+  }
 
 
   printf("\n");
-  
-  
 }
 
 int main()

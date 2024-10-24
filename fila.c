@@ -2,11 +2,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
 Fila *fila_init()
 {
     Fila *f = (Fila *)malloc(sizeof(Fila));
-    if (f != NULL)
+    if (f == NULL)
     {
         return NULL;
     }
@@ -34,7 +35,7 @@ void fila_push(Fila *f, elem_fila *dado)
             p->dado = (elem_fila *)malloc(sizeof(elem_fila));
             if (p->dado != NULL)
             {
-                memcpy(p->dado, dado, sizeof(elem_fila));
+                memcpy(p->dado, dado, strlen(dado)+1);
             }
 
             if (f->inicio == NULL)
@@ -101,7 +102,7 @@ void fila_libera(Fila *f)
     }
     free(f);}
 }
-int fila_verifica_elem(Fila *f, elem_fila *dado)
+bool fila_verifica_elem(Fila *f, elem_fila *dado)
 {
     if (f != NULL || f->inicio != NULL)
     {
@@ -111,8 +112,9 @@ int fila_verifica_elem(Fila *f, elem_fila *dado)
     while (p != NULL)
     {
         if (strcmp(p->dado, dado) == 0)
-            return 1;
+            return true;
         p = p->proximo;
     }
-    return 0;}
+    return false;
+    }
 }

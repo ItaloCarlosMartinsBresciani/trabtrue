@@ -1,6 +1,9 @@
 #ifndef FILA_H
 #define FILA_H
 
+#include <stdbool.h>
+
+
 typedef char elem_fila;
 typedef struct FilaBloco{
     struct FilaBloco *proximo; 
@@ -17,7 +20,7 @@ int fila_vazia(Fila *f);
 void fila_push(Fila *f, elem_fila *dado);
 FilaBloco *fila_pop(Fila *f);
 void fila_print(Fila *fila);
-int fila_verifica_elem(Fila*f, elem_fila*dado);
+bool fila_verifica_elem(Fila*f, elem_fila*dado);
 void fila_libera(Fila *f);
 
 

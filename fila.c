@@ -54,15 +54,9 @@ void fila_push(Fila *f, elem_fila *dado)
             }
             f->total++;
         }
-        else
-        {
-            return NULL;
-        }
+        
     }
-    else
-    {
-        return NULL;
-    }
+    
 }
 FilaBloco *fila_pop(Fila *f)
 {
@@ -73,10 +67,7 @@ FilaBloco *fila_pop(Fila *f)
         f->total--;
         return p;
     }
-    else
-    {
-        return NULL;
-    }
+    
 }
 void fila_print(Fila *f)
 {
@@ -93,10 +84,9 @@ void fila_print(Fila *f)
 }
 void fila_libera(Fila *f)
 {
-    if (f == NULL)
+    if (f != NULL)
     {
-        return NULL;
-    }
+       
     FilaBloco *p = f->inicio;
     while (p != NULL)
     {
@@ -105,14 +95,13 @@ void fila_libera(Fila *f)
         free(p);
         p = prox;
     }
-    free(f);
+    free(f);}
 }
 int fila_verifica_elem(Fila *f, elem_fila *dado)
 {
-    if (f == NULL || f->inicio == NULL)
+    if (f != NULL || f->inicio != NULL)
     {
-        return NULL;
-    }
+        
     FilaBloco *p = f->inicio;
 
     while (p != NULL)
@@ -121,5 +110,5 @@ int fila_verifica_elem(Fila *f, elem_fila *dado)
             return 1;
         p = p->proximo;
     }
-    return 0;
+    return 0;}
 }

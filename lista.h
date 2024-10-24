@@ -30,4 +30,5 @@ void lista_print(Lista *lista);
 void lista_libera(Lista *lista);
 ListaBloco *lista_verifica_elem(Lista *lista, elem_lista *dado);
 
+void lista_bloco_print(ListaBloco *listabloco);
 #endif

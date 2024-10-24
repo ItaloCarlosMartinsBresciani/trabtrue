@@ -68,32 +68,32 @@ PilhaBloco *pilha_pop(Pilha *pilha)
   }
 }
 
+
+
+
 void pilha_print(Pilha *pilha)
 {
   if (!pilha_vazia(pilha))
   {
     PilhaBloco *aux = pilha->topo;
-    // FilaBloco *aux2 = aux->fila->inicio;
     while (aux != NULL)
     {
+      
       if (aux->fila->total > 1){
-        printf("\t\t%d lances de R$", aux->fila->total);//total de lançes
-
+        printf("\t\t%d lances de R$", aux->fila->total);
       }else{
         printf("\t\t%d lance de R$", aux->fila->total);
       }
-      //total de lançes
-      printf("%.2f: ", aux->dado);
+      printf("%.2f: ", aux->dado); 
+
       fila_print(aux->fila);
-      //while (aux2 != NULL)
-      //{
-      //  printf("%s\n", aux2->dado);
-      //  aux2 = aux2->proximo;
-      //}
       aux = aux->anterior;
     }
   }
 }
+
+
+
 void pilha_libera(Pilha *pilha)
 {
   if (!pilha_vazia(pilha))
@@ -116,4 +116,8 @@ PilhaBloco *pilha_print_topo(Pilha *pilha)
   {
     return pilha->topo;
   }
+}
+
+void pilha_bloco_print(PilhaBloco *pilhabloco){
+    printf("%.2f", pilhabloco->dado);
 }

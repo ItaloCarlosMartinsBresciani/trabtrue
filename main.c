@@ -6,12 +6,21 @@
 #include <string.h>
 #include <stdlib.h>
 
-/* Protótipos das funções */  
+/* Protótipos das funções */
 void cadastra_produto(Lista *Lista_Prod);
-void dar_lance(Lista *Lista_Prod);
+void dar_lance(Lista *Lista_Prod, Fila *fila_usuario);
 // void lista_produtos(/*lista de produtos...(?));
 // void avisa_usuario(/*lista de produtos...(?));
-// void encerra(/*lista de produtos...(?)); 
+void encerra(Lista *Lista_Prod);
+
+
+/*void avisa_usuario(Lista *Lista_Prod)
+{
+ListaBloco *l = Lista_Prod->inicio;
+PilhaBloco *l = pilha_print_topo(Lista_Prod->inicio->pilha);
+
+
+}*/
 
 void cadastra_produto(Lista *Lista_Prod)
 {
@@ -31,12 +40,12 @@ void cadastra_produto(Lista *Lista_Prod)
   printf("Produto cadastrado com sucesso!\n");
 }
 
-void dar_lance(Lista *Lista_Prod)
+void dar_lance(Lista *Lista_Prod, Fila *fila_usuario)
 {
   printf("Entre com seu nome: ");
   char aux_nome[50];
   scanf("%s", aux_nome);
-
+  push_fila_usuario(fila_usuario, aux_nome);
   printf("Entre com o valor do lance: R$ ");
   float aux_lance;
   scanf("%f", &aux_lance);
@@ -59,7 +68,9 @@ void dar_lance(Lista *Lista_Prod)
     }
     else
     {
-      if (lance->pilha->topo->dado <= aux_lance)
+      PilhaBloco *n = pilha_print_topo(lance->pilha);
+      // if (lance->pilha->topo->dado <= aux_lance)
+      if (n->dado <= aux_lance)
       {
         pilha_push(lance->pilha, &aux_lance, aux_nome);
         printf("Lance cadastrado com sucesso!\n");
@@ -69,11 +80,33 @@ void dar_lance(Lista *Lista_Prod)
         printf("Seu lance pelo produto %s não foi aceito. Você precisa dar um lance maior!\n", aux_produto);
       }
     }
-
-    
   }
 
   printf("\n");
+}
+
+void encerra(Lista *Lista_Prod)
+{
+  ListaBloco *aux = Lista_Prod->inicio;
+  while (aux != NULL)
+  {
+    printf("\t%s: ", aux->dado);
+    if (pilha_vazia(aux->pilha) == false)
+    {
+      PilhaBloco *n = pilha_print_topo(aux->pilha);
+      FilaBloco *usuario = n->fila->inicio;
+
+      printf("%s ", usuario->dado);
+      printf("comprou por R$ %.2f\n", n->dado);
+    }
+    else
+    {
+      printf("Nenhum lance foi dado para esse produto.\n");
+    }
+    aux = aux->proximo;
+    
+  }
+  printf("Leilão encerrado.\n");
 }
 
 int main()
@@ -85,6 +118,7 @@ int main()
   int cont_cadastros = 0;
 
   Lista *Lista_Prod = lista_init();
+  Fila *fila_usuario = fila_init();
   do
   {
     printf("O que deseja fazer? ");
@@ -106,7 +140,35 @@ int main()
       }
       else
       {
-        lista_print(Lista_Prod);
+        ListaBloco *aux_lista = Lista_Prod->inicio; //
+        while (aux_lista != NULL)
+        {
+          printf("\t");
+          lista_bloco_print(aux_lista); // printa o produto (bloco da lista de produtos)
+          printf("\n");
+          PilhaBloco *aux_pilha = aux_lista->pilha->topo;
+
+          while (aux_pilha != NULL)
+          {
+            printf("\t\t%d lance(s) de R$", aux_pilha->fila->total);
+            pilha_bloco_print(aux_pilha); // printa o valor do produto (elemento do bloco da pilha)
+            printf(": ");
+            FilaBloco *aux_fila = aux_pilha->fila->inicio;
+            while (aux_fila != NULL)
+            {
+              fila_bloco_print(aux_fila); // printa o nome do usuario na fila
+              if(aux_fila->proximo != NULL){
+                printf(", ");
+              }
+              aux_fila = aux_fila->proximo;
+            }
+            aux_pilha = aux_pilha->anterior;
+            printf("\n");
+          }
+          aux_lista = aux_lista->proximo;
+        }
+
+        // lista_print(Lista_Prod);
         printf("Listagem completa\n");
       }
       printf("\n");
@@ -114,7 +176,7 @@ int main()
 
     case 3: // dá um lance em um produto
       printf("Resposta: 3\n");
-      dar_lance(Lista_Prod);
+      dar_lance(Lista_Prod, fila_usuario);
       printf("\n");
       break;
 
@@ -126,7 +188,7 @@ int main()
 
     case 5: // encerra leilão: lista os usuários e o lance ganhador para cada produto, além de reinicializar o sistema
       printf("Resposta: 5\n");
-      // encerra();
+      encerra(Lista_Prod);
       printf("\n");
       break;
 

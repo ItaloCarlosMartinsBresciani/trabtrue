@@ -72,11 +72,9 @@ FilaBloco *fila_pop(Fila *f)
 }
 void fila_print(Fila *f)
 {
-    if (f == NULL || f->inicio == NULL) // Corrigido para usar '&&'
+    if (f != NULL || f->inicio != NULL) // Corrigido para usar '&&'
     {
-        printf("Fila vazia ou nula.\n");
-        return;
-    }
+       
 
     FilaBloco *p = f->inicio;
     
@@ -90,7 +88,7 @@ void fila_print(Fila *f)
         
         p = p->proximo;
     }
-    printf("\n");
+    printf("\n");}
 }
 
 void fila_libera(Fila *f)
@@ -108,7 +106,7 @@ void fila_libera(Fila *f)
     }
     free(f);}
 }
-bool fila_verifica_elem(Fila *f, elem_fila *dado)
+FilaBloco *fila_verifica_elem(Fila *f, elem_fila *dado)
 {
     if (f != NULL || f->inicio != NULL)
     {
@@ -118,9 +116,27 @@ bool fila_verifica_elem(Fila *f, elem_fila *dado)
     while (p != NULL)
     {
         if (strcmp(p->dado, dado) == 0)
-            return true;
+            return p;
         p = p->proximo;
     }
-    return false;
+    return NULL;
     }
+}
+int fila_total(Fila*f){
+    return f->total;
+}
+
+void push_fila_usuario(Fila *F, elem_fila *dado){ //fila de usuarios sem repetição
+
+    if (!fila_vazia(F)){  //se tiver vazia
+        fila_push(F,dado); //dá um push na fila
+    }else{
+        if (fila_verifica_elem(F,dado)==NULL){ //verifica se o dado já está na fila
+            fila_push(F,dado); //só dá um push se não tiver
+        }
+    }
+}
+
+void fila_bloco_print(FilaBloco *filabloco){
+    printf("%s", filabloco->dado);
 }

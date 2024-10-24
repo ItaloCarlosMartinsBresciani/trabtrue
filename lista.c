@@ -31,7 +31,7 @@ ListaBloco *lista_pop(Lista *lista)
     {
         return NULL;
     }
-    
+
     ListaBloco *bloco_removido = lista->fim;
 
     if (lista->inicio == lista->fim)
@@ -50,19 +50,17 @@ ListaBloco *lista_pop(Lista *lista)
 
 void lista_print(Lista *lista)
 {
-    if (lista_vazia(lista))
+    if (!lista_vazia(lista))
     {
-        printf("Lista vazia.\n");
-        return;
-    }
 
-    ListaBloco *bloco = lista->inicio; 
+        ListaBloco *bloco = lista->inicio;
 
-    while (bloco != NULL)
-    {
-        printf("\t%s\n", bloco->dado);
-        pilha_print(bloco->pilha);  
-        bloco = bloco->proximo;       
+        while (bloco != NULL)
+        {
+            printf("\t%s\n", bloco->dado);
+            pilha_print(bloco->pilha);
+            bloco = bloco->proximo;
+        }
     }
 }
 
@@ -73,7 +71,6 @@ void lista_push(Lista *lista, elem_lista *dado)
     Lista_bloco->dado = dado;
     Pilha *P = pilha_init();
     Lista_bloco->pilha = P;
-  
 
     ListaBloco *aux, *ant;
     aux = lista->inicio;
@@ -121,15 +118,24 @@ void lista_libera(Lista *lista)
 
     free(lista); // Libera a lista após liberar todos os blocos
 }
-ListaBloco *lista_verifica_elem(Lista *lista, elem_lista *dado) {
-    if (!lista_vazia(lista)) {
+ListaBloco *lista_verifica_elem(Lista *lista, elem_lista *dado)
+{
+    if (!lista_vazia(lista))
+    {
         ListaBloco *no = lista->inicio;
-        while (no != NULL) {
-            if (strcmp(no->dado, dado) == 0) {
+        while (no != NULL)
+        {
+            if (strcmp(no->dado, dado) == 0)
+            {
                 return no;
             }
             no = no->proximo;
         }
     }
     return NULL;
+}
+
+void lista_bloco_print(ListaBloco *listabloco)
+{
+    printf("%s", listabloco->dado);
 }

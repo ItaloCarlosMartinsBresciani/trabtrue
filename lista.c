@@ -65,12 +65,11 @@ void lista_print(Lista *lista)
     }
 }
 
-
 void lista_push(Lista *lista, elem_lista *dado)
 {
     ListaBloco *Lista_bloco = (ListaBloco *)malloc(sizeof(ListaBloco));
     assert(Lista_bloco != NULL);
-    
+
     Lista_bloco->dado = dado;
 
     ListaBloco *aux, *ant;
@@ -105,6 +104,7 @@ void lista_push(Lista *lista, elem_lista *dado)
         Lista_bloco->anterior = ant;
     }
 }
+
 void lista_libera(Lista *lista)
 {
     ListaBloco *bloco = lista->inicio;

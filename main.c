@@ -8,16 +8,16 @@
 #include <stdlib.h>
 
 /* Protótipos das funções */
-void cadastra_produto(Lista *Lista_Prod);
+void cadastra_produto(Lista *Lista_Prod, tipo_erro *erro);
 int dar_lance(Lista *Lista_Prod, Fila *fila_usuario_geral);
 void lista_produtos(Lista *Lista_Prod);
 void avisa_usuario(Lista *Lista_Prod, Fila *fila_usuario_geral);
 void encerra(Lista *Lista_Prod);
 void libera_mem(Lista *Lista_Prod);
 
-void avisa_usuario(Lista *Lista_Prod, Fila *fila_usuario_geral)
-{
-
+void avisa_usuario(Lista *Lista_Prod, Fila *fila_usuario_geral) //Essa função vai percorrer a lista de todos os usuários
+{                                                               //Para percorrer todos os produtos para percorrer a lista de usuários do produto
+                                                                //Se encontra vai pro proximo
   // Verifique se as listas não são nulas
   if (Lista_Prod == NULL || fila_usuario_geral == NULL)
   {
@@ -38,14 +38,7 @@ void avisa_usuario(Lista *Lista_Prod, Fila *fila_usuario_geral)
     while (aux2 != NULL)
     {
       int count = 0;
-      // Verifique se a fila de usuários no produto está inicializada (DEBUG)
-      ////if (aux2->fila_usu == NULL)
-      //{
-      //  printf("Fila de usuários do produto %s NÂO está inicializada\n", aux2->dado);
-      //  aux2 = aux2->proximo;
-      //  continue; // Pule para o próximo produto se a fila não estiver inicializada
-      //}
-
+      
       FilaBloco *aux3 = aux2->fila_usu->inicio;
       while (aux3 != NULL)
       {
@@ -66,7 +59,7 @@ void avisa_usuario(Lista *Lista_Prod, Fila *fila_usuario_geral)
         }
         aux3 = aux3->proximo;
       }
-      // Verifique se aux3 não é nulo antes de usar
+      // Verifica se aux3 não é nulo antes de usar
       if (count == aux2->fila_usu->total)
       {
         printf("para %s: não gostaria de dar um lance pela %s?\n", aux->dado, aux2->dado);
@@ -77,7 +70,7 @@ void avisa_usuario(Lista *Lista_Prod, Fila *fila_usuario_geral)
   }
 }
 
-void cadastra_produto(Lista *Lista_Prod) //verificar se o produto já ta na lista ou não
+void cadastra_produto(Lista *Lista_Prod, tipo_erro *erro) //  Apenas cadastra o produto
 {
   printf("Entre com o nome do produto: ");
   char nome[50];
@@ -91,15 +84,21 @@ void cadastra_produto(Lista *Lista_Prod) //verificar se o produto já ta na list
   }
   strcpy(produto, nome);
 
-  int num = lista_push(Lista_Prod, produto);
-  if (num==SUCESSO){
+  lista_push(Lista_Prod, produto, erro);
+  if(*erro != SUCESSO){
+    printf("Erro ao inserir elemento na lista");
+  }
+  
+
+  if (*erro == SUCESSO){
     printf("Produto cadastrado com sucesso!\n");
   }else{
     printf("Produto já cadastrado! Tente outra vez.\n");
   }
 }
 
-int dar_lance(Lista *Lista_Prod, Fila *fila_usuario_geral)
+int dar_lance(Lista *Lista_Prod, Fila *fila_usuario_geral) //Função para receber e registrar um lance, além de adicionar os usuários
+                                                           //do lance para a lista de usuários
 {
   printf("Entre com seu nome: ");
   char aux_nome[50];
@@ -164,9 +163,9 @@ int dar_lance(Lista *Lista_Prod, Fila *fila_usuario_geral)
   printf("\n");
 }
 
-void lista_produtos(Lista *Lista_Prod)
+void lista_produtos(Lista *Lista_Prod) // Esta função vai mostrar os produtos com seus respectivos lances (mostrando nome e valor dos lances)
 {
-  ListaBloco *aux_lista = Lista_Prod->inicio; //
+  ListaBloco *aux_lista = Lista_Prod->inicio;
   while (aux_lista != NULL)
   {
     printf("\t");
@@ -201,7 +200,7 @@ void lista_produtos(Lista *Lista_Prod)
   }
 }
 
-void encerra(Lista *Lista_Prod)
+void encerra(Lista *Lista_Prod) //Função para encerrrar o leilão, mostrando os usuários que deram o lance no topo da pilha
 {
   ListaBloco *aux = Lista_Prod->inicio;
   while (aux != NULL)
@@ -224,7 +223,7 @@ void encerra(Lista *Lista_Prod)
   printf("Leilão encerrado.\n");
 }
 
-void libera_mem(Lista *Lista_Prod)
+void libera_mem(Lista *Lista_Prod) //Função para liberar a meméria da lista de produtos cadastrados (e as estruturas ligadas a ela)
 {
   ListaBloco *l = Lista_Prod->inicio;
   while (l != NULL)
@@ -245,15 +244,18 @@ void libera_mem(Lista *Lista_Prod)
   lista_libera(Lista_Prod);
 }
 
-int main()
+int main() //Função principal, onde é exibida as opções de manipulação do Leilão
 {
   setlocale(LC_ALL, "");
   printf("Caro usuário, suas opções são:\n\t1)  cadastrar um produto\n\t2)  listar produtos e lances\n\t3)  dar um lance\n\t4)  listar outros produtos para lances\n\t5)  encerrar leilão\n\n");
-
+  tipo_erro erro = SUCESSO; // variável controladora de erros
   int comando;
   int cont_cadastros = 0;
 
-  Lista *Lista_Prod = lista_init();
+  Lista *Lista_Prod = lista_init(&erro);
+  if(erro != SUCESSO){
+    printf("Erro ao inicializar a lista");
+  }
   Fila *fila_usuario_geral = fila_init();
 
   do
@@ -275,7 +277,7 @@ int main()
     {
     case 1: // cadastra um produto
       printf("Resposta: 1\n");
-      cadastra_produto(Lista_Prod);
+      cadastra_produto(Lista_Prod, &erro);
       cont_cadastros++;
       printf("\n");
       break;

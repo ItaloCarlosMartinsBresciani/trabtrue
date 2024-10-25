@@ -107,7 +107,7 @@ int lista_push(Lista *lista, elem_lista *dado)  /*, int *erro*/
     if (aux != NULL && strcmp(dado, aux->dado) == 0)
     {
         free(Lista_bloco);
-        return SUCESSO;
+        return ERRO99;
     }
     // Se estamos inserindo no início da lista (antes do primeiro elemento)
     if (ant == NULL)
@@ -128,6 +128,7 @@ int lista_push(Lista *lista, elem_lista *dado)  /*, int *erro*/
             lista->fim = Lista_bloco;
         Lista_bloco->anterior = ant;
     }
+    return SUCESSO;
 }
 
 int lista_libera(Lista *lista)  /*, int *erro*/

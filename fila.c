@@ -148,7 +148,7 @@ FilaBloco *fila_verifica_elem(Fila *f, elem_fila *dado, tipo_erro *erro) //Verif
         
         return NULL;
     }else{
-        *erro = ERRO_NULL;
+        *erro = ERRO_NULL; // tentou acessar um ponteiro nulo ou dado nulo
         return NULL; 
     }
 }

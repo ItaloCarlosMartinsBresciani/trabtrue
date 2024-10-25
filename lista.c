@@ -1,20 +1,27 @@
 #include "lista.h"
+#include "erro.h"
 #include <stdio.h>
 #include <locale.h>
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
 
-Lista *lista_init()
+Lista *lista_init()  //ok
 {
     Lista *lista = (Lista *)malloc(sizeof(Lista));
+    if (lista==NULL){
+        return NULL;
+    }
     lista->fim = NULL;
     lista->inicio = NULL;
     return lista;
 }
 
-bool lista_vazia(Lista *lista)
+bool lista_vazia(Lista *lista)  /*, int *erro*/
 {
+    if (lista==NULL){ //verifica se a lista existe
+        return ERRO1; 
+    }
     if (lista->inicio == NULL)
     {
         return true;
@@ -25,9 +32,12 @@ bool lista_vazia(Lista *lista)
     }
 }
 
-ListaBloco *lista_pop(Lista *lista)
+ListaBloco *lista_pop(Lista *lista)  /*, int *erro*/
 {
-    if (lista_vazia(lista))
+    if (lista==NULL){ //verifica se a lista existe
+        return NULL; 
+    }
+    if (lista_vazia(lista)==true)
     {
         return NULL;
     }
@@ -47,9 +57,11 @@ ListaBloco *lista_pop(Lista *lista)
 
     return bloco_removido;
 }
-
-void lista_print(Lista *lista)
+int lista_print(Lista *lista)  /*, int *erro*/
 {
+    if (lista==NULL){
+        return ERRO1; 
+    }
     if (!lista_vazia(lista))
     {
         ListaBloco *bloco = lista->inicio;
@@ -62,10 +74,16 @@ void lista_print(Lista *lista)
     }
 }
 
-void lista_push(Lista *lista, elem_lista *dado)
+int lista_push(Lista *lista, elem_lista *dado)  /*, int *erro*/
 {
+    if (lista==NULL || dado==NULL){
+        return ERRO1; 
+    }
     ListaBloco *Lista_bloco = (ListaBloco *)malloc(sizeof(ListaBloco));
-
+    if (Lista_bloco==NULL){
+        return ERRO1; 
+    }
+    Lista_bloco->fila_usu=NULL;
     Lista_bloco->dado = dado;
     Pilha *P = pilha_init();
     Lista_bloco->pilha = P;
@@ -82,7 +100,7 @@ void lista_push(Lista *lista, elem_lista *dado)
     if (aux != NULL && strcmp(dado, aux->dado) == 0)
     {
         free(Lista_bloco);
-        return;
+        return SUCESSO;
     }
     if (ant == NULL)
     {
@@ -101,10 +119,14 @@ void lista_push(Lista *lista, elem_lista *dado)
             lista->fim = Lista_bloco;
         Lista_bloco->anterior = ant;
     }
+    
 }
 
-void lista_libera(Lista *lista)
+int lista_libera(Lista *lista)  /*, int *erro*/
 {
+    if (lista==NULL){
+        return ERRO1; 
+    }
     ListaBloco *bloco = lista->inicio;
 
     while (bloco != NULL)
@@ -116,8 +138,11 @@ void lista_libera(Lista *lista)
 
     free(lista); // Libera a lista após liberar todos os blocos
 }
-ListaBloco *lista_verifica_elem(Lista *lista, elem_lista *dado)
+ListaBloco *lista_verifica_elem(Lista *lista, elem_lista *dado)  /*, int *erro*/
 {
+    if (lista==NULL || dado==NULL){
+        return NULL; //erro
+    }
     if (!lista_vazia(lista))
     {
         ListaBloco *no = lista->inicio;
@@ -133,7 +158,10 @@ ListaBloco *lista_verifica_elem(Lista *lista, elem_lista *dado)
     return NULL;
 }
 
-void lista_bloco_print(ListaBloco *listabloco)
+int lista_bloco_print(ListaBloco *listabloco)  /*, int *erro*/
 {
+    if (listabloco==NULL){
+        return ERRO1; 
+    }
     printf("%s", listabloco->dado);
 }

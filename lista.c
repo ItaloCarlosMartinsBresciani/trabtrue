@@ -19,17 +19,20 @@ Lista *lista_init(tipo_erro *erro)  //ok
     return lista;  
 }
 
-bool lista_vazia(Lista *lista)  /*, int *erro*/
+bool lista_vazia(Lista *lista, tipo_erro *erro)  /*, int *erro*/
 {
     if (lista==NULL){ //verifica se a lista existe
-        return ERRO1; 
+        *erro = ERRO_NULL; // tentou usar um ponteiro nulo
+        return false; 
     }
     if (lista->inicio == NULL)
     {
+        *erro = SUCESSO; // verificação ok
         return true;
     }
     else
     {
+        *erro = SUCESSO; // verificação ok
         return false;
     }
 }
@@ -37,10 +40,16 @@ bool lista_vazia(Lista *lista)  /*, int *erro*/
 ListaBloco *lista_pop(Lista *lista, tipo_erro *erro)  /*, int *erro*/
 {
     if (lista==NULL){ //verifica se a lista existe
+        *erro = ERRO_NULL;
         return NULL; 
     }
-    if (lista_vazia(lista)==true)
+    if (lista_vazia(lista, erro)==true)
     {
+        if(erro != SUCESSO) // significa que a verificação se a lista está vazia não deu certo
+        {
+            return NULL;
+        }
+        *erro = ERRO_POP_VAZIO; // tentou inserir elemento em uma lista vazia
         return NULL;
     }
 
@@ -57,16 +66,22 @@ ListaBloco *lista_pop(Lista *lista, tipo_erro *erro)  /*, int *erro*/
         lista->fim->proximo = NULL;
     }
 
+    *erro = SUCESSO;
     return bloco_removido;
 }
 
-int lista_print(Lista *lista)  /*, int *erro*/
+void lista_print(Lista *lista, tipo_erro *erro)  /*, int *erro*/
 {
     if (lista==NULL){
-        return ERRO1; 
+        *erro = ERRO_NULL; // tentou usar ponteiro
+        return; 
     }
-    if (!lista_vazia(lista))
+    if (!lista_vazia(lista, erro))
     {
+        if(erro != SUCESSO) // verificação de lista vazia não funcionou (ERRO_NULL)
+        {
+            return;
+        }
         ListaBloco *bloco = lista->inicio;
 
         while (bloco != NULL)
@@ -75,12 +90,13 @@ int lista_print(Lista *lista)  /*, int *erro*/
             bloco = bloco->proximo;
         }
     }
+    *erro = SUCESSO;
 }
 
 void lista_push(Lista *lista, elem_lista *dado, tipo_erro *erro)  /*, int *erro*/
 {
     if (lista==NULL || dado==NULL){ //verifica se a lista existe e o dado existe
-        *erro = ERRO_NULL_POINTER; // foi passado um ponteiro nulo para a função lista_push
+        *erro = ERRO_NULL; // foi passado um ponteiro nulo para a função lista_push
         return; 
     }
     ListaBloco *Lista_bloco = (ListaBloco *)malloc(sizeof(ListaBloco)); //aloquei um bloco lista
@@ -92,7 +108,7 @@ void lista_push(Lista *lista, elem_lista *dado, tipo_erro *erro)  /*, int *erro*
     Lista_bloco->fila_usu = fila_init(); //inicializei
     Lista_bloco->dado = dado; //campo dado aponta o nome do produto
     
-    Pilha *P = pilha_init();
+    Pilha *P = pilha_init(erro);
     Lista_bloco->pilha = P;
 
     ListaBloco *aux, *ant;
@@ -137,10 +153,11 @@ void lista_push(Lista *lista, elem_lista *dado, tipo_erro *erro)  /*, int *erro*
     *erro = SUCESSO;
 }
 
-int lista_libera(Lista *lista)  /*, int *erro*/
+void lista_libera(Lista *lista, tipo_erro *erro) 
 {
     if (lista==NULL){
-        return ERRO1; 
+        *erro = ERRO_NULL; // tentou usar um ponteiro nullo
+        return; 
     }
     ListaBloco *bloco = lista->inicio;
 
@@ -150,33 +167,43 @@ int lista_libera(Lista *lista)  /*, int *erro*/
         free(bloco);
         bloco = prox;
     }
-
     free(lista); // Libera a lista após liberar todos os blocos
+    *erro = SUCESSO;
 }
-ListaBloco *lista_verifica_elem(Lista *lista, elem_lista *dado)  /*, int *erro*/
+ListaBloco *lista_verifica_elem(Lista *lista, elem_lista *dado, tipo_erro *erro)  /*, int *erro*/
 {
     if (lista==NULL || dado==NULL){
+        *erro = ERRO_NULL;
         return NULL; //erro
     }
-    if (!lista_vazia(lista))
+    if (!lista_vazia(lista, erro))
     {
+        if(erro != SUCESSO) // verificação de lista vazia não funcionou (ERRO_NULL)
+        {
+            return NULL;
+        }
+        
         ListaBloco *no = lista->inicio;
         while (no != NULL)
         {
             if (strcmp(no->dado, dado) == 0)
             {
+                *erro = SUCESSO;
                 return no;
             }
             no = no->proximo;
         }
     }
+    *erro = SUCESSO;
     return NULL;
 }
 
-int lista_bloco_print(ListaBloco *listabloco)  /*, int *erro*/
+void lista_bloco_print(ListaBloco *listabloco, tipo_erro *erro)  /*, int *erro*/
 {
     if (listabloco==NULL){
-        return ERRO1; 
+        *erro = ERRO_NULL; // tentou usar ponteiro nulo
+        return; 
     }
     printf("%s", listabloco->dado);
+    *erro = SUCESSO;
 }

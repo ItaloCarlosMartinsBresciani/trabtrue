@@ -54,21 +54,21 @@ void pilha_push(Pilha *pilha, elem_pilha *dado, elem_fila *nome, tipo_erro *erro
   {
     pilha->topo = bloco;
     bloco->anterior = NULL;
-    fila = fila_init();
+    fila = fila_init(erro);
     bloco->fila = fila;
-    fila_push(fila, nome);
+    fila_push(fila, nome, erro);
   }
   else if (pilha->topo->dado == (*dado)) // se o lance for igual
   {
-    fila_push(pilha->topo->fila, nome);
+    fila_push(pilha->topo->fila, nome, erro);
   }
   else if (pilha->topo->dado < (*dado)) // só empilha se o lance for maior que o topo
   {
     bloco->anterior = pilha->topo;
     pilha->topo = bloco;
-    fila = fila_init();
+    fila = fila_init(erro);
     bloco->fila = fila;
-    fila_push(fila, nome);
+    fila_push(fila, nome, erro);
   }
   *erro = SUCESSO;
 }

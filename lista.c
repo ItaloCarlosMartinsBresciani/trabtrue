@@ -21,7 +21,7 @@ Lista *lista_init(tipo_erro *erro)  //ok
 
 bool lista_vazia(Lista *lista, tipo_erro *erro)  /*, int *erro*/
 {
-    if (lista==NULL){ //verifica se a lista existe
+    if (lista == NULL){ //verifica se a lista existe
         *erro = ERRO_NULL; // tentou usar um ponteiro nulo
         return false; 
     }
@@ -105,7 +105,7 @@ void lista_push(Lista *lista, elem_lista *dado, tipo_erro *erro)  /*, int *erro*
         *erro = ERRO_ALLOC; // erro de alocação de memória
         return; 
     }
-    Lista_bloco->fila_usu = fila_init(); //inicializei
+    Lista_bloco->fila_usu = fila_init(erro); //inicializei
     Lista_bloco->dado = dado; //campo dado aponta o nome do produto
     
     Pilha *P = pilha_init(erro);
@@ -170,7 +170,7 @@ void lista_libera(Lista *lista, tipo_erro *erro)
     free(lista); // Libera a lista após liberar todos os blocos
     *erro = SUCESSO;
 }
-ListaBloco *lista_verifica_elem(Lista *lista, elem_lista *dado, tipo_erro *erro)  /*, int *erro*/
+ListaBloco *lista_verifica_elem(Lista *lista, elem_lista *dado, tipo_erro *erro)
 {
     if (lista==NULL || dado==NULL){
         *erro = ERRO_NULL;
@@ -178,7 +178,7 @@ ListaBloco *lista_verifica_elem(Lista *lista, elem_lista *dado, tipo_erro *erro)
     }
     if (!lista_vazia(lista, erro))
     {
-        if(erro != SUCESSO) // verificação de lista vazia não funcionou (ERRO_NULL)
+        if(*erro != SUCESSO) // verificação de lista vazia não funcionou (ERRO_NULL)
         {
             return NULL;
         }

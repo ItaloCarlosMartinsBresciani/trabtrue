@@ -6,46 +6,59 @@
 #include <stdbool.h>
 
 
-Fila *fila_init()
+Fila *fila_init(tipo_erro *erro)
 {
     Fila *f = (Fila *)malloc(sizeof(Fila));
     if (f == NULL)
     {
+        *erro = ERRO_ALLOC;
         return NULL;
     }
     f->inicio = NULL;
     f->fim = NULL;
     f->total = 0;
+    *erro = SUCESSO;
     return f;
 }
-int fila_vazia(Fila *f) //tem que mudar para bool
+bool fila_vazia(Fila *f, tipo_erro *erro) //tem que mudar para bool
 {
     if (f==NULL){
-        return ERRO1; 
+        *erro = ERRO_NULL;
+        return false; 
     }
     if (f->inicio == NULL)
     {
-        return 1;
+        *erro = SUCESSO;
+        return true;
     }
     else
-        return 0;
+        *erro = SUCESSO;
+        return false;
 }
-int fila_push(Fila *f, elem_fila *dado) //Adiciona uma elemento na fila
+void fila_push(Fila *f, elem_fila *dado, tipo_erro *erro) //Adiciona uma elemento na fila
 {
-    if (f == NULL)
-        return ERRO1;
-    FilaBloco *p = (FilaBloco *)malloc(sizeof(FilaBloco));
-
-    if (fila_verifica_elem(f, dado) != NULL)
-    {
-        return ERRO1;
+    if (f == NULL){
+        *erro = ERRO_NULL;
+        return;
     }
-    if (p == NULL)
-        return ERRO1;
+    FilaBloco *p = (FilaBloco *)malloc(sizeof(FilaBloco));
+    
+    if (p==NULL){
+        *erro = ERRO_ALLOC; // erro de alocação de memória
+        return; 
+    }
+
+    if (fila_verifica_elem(f, dado, erro) != NULL)
+    {
+        *erro = ERRO_ELEM_REPETIDO;
+        return;
+    }
 
     p->dado = (elem_fila *)malloc(sizeof(elem_fila));
-    if (p->dado == NULL)
-        return ERRO1;
+    if (p->dado == NULL){
+        *erro = ERRO_NULL;
+        return;
+    }
 
     memcpy(p->dado, dado, strlen(dado) + 1);
 
@@ -66,24 +79,29 @@ int fila_push(Fila *f, elem_fila *dado) //Adiciona uma elemento na fila
     }
     f->fim=p;
     f->total++;
+    *erro = SUCESSO;
 }
 
-FilaBloco *fila_pop(Fila *f) // Remove um elemento e o retorna
+FilaBloco *fila_pop(Fila *f, tipo_erro *erro) // Remove um elemento e o retorna
 {
     if (f == NULL || f->inicio == NULL)
     {
+        *erro = ERRO_NULL;
         return NULL;
     }
 
     FilaBloco *p = f->inicio;
     f->inicio = p->proximo;
     f->total--;
+    *erro = SUCESSO;
     return p;
 }
-int fila_print(Fila *f /*, int *erro*/) //printa a fila
+void fila_print(Fila *f, tipo_erro *erro) //printa a fila
 {
-    if (f == NULL || f->inicio == NULL)
-        return ERRO1; // erro=0;
+    if (f == NULL || f->inicio == NULL){
+        *erro = ERRO_NULL;
+        return;
+    }
 
     FilaBloco *p = f->inicio;
     while (p != NULL)
@@ -91,13 +109,16 @@ int fila_print(Fila *f /*, int *erro*/) //printa a fila
         printf("%s\n", p->dado);
         p = p->proximo;
     }
+    *erro = SUCESSO;
     printf("\n");
 }
 
-int fila_libera(Fila *f /*, int *erro*/)
+void fila_libera(Fila *f, tipo_erro *erro)
 {
-    if (f == NULL)
-        return ERRO1; // erro=1;
+    if (f == NULL){
+        *erro = ERRO_NULL;
+        return;
+    }
 
     FilaBloco *p = f->inicio;
     while (p != NULL)
@@ -108,37 +129,45 @@ int fila_libera(Fila *f /*, int *erro*/)
         p = prox;
     }
     free(f);
+    *erro = SUCESSO;
 }
-FilaBloco *fila_verifica_elem(Fila *f, elem_fila *dado ) //Verifica se tem uma elemento, se o encontar o retorna
+FilaBloco *fila_verifica_elem(Fila *f, elem_fila *dado, tipo_erro *erro) //Verifica se tem uma elemento, se o encontar o retorna
 {
     if (f != NULL || f->inicio != NULL)
     {
-
         FilaBloco *p = f->inicio;
 
         while (p != NULL)
         {
-            if (strcmp(p->dado, dado) == 0)
+            if (strcmp(p->dado, dado) == 0){
+                *erro = SUCESSO;
                 return p;
+            }
             p = p->proximo;
         }
+        
         return NULL;
     }else{
+        *erro = ERRO_NULL;
         return NULL; 
     }
 }
-int fila_total(Fila *f /*, int *erro*/)
+int fila_total(Fila *f, tipo_erro *erro)
 {
     if (f==NULL){
-        return ERRO1; 
+        *erro = ERRO_NULL;
+        return 0;
     }
+    *erro = SUCESSO;
     return f->total;
 }
 
-int fila_bloco_print(FilaBloco *filabloco /*, int *erro*/) // Imprimir o dado de um bloco específico da fila
+void fila_bloco_print(FilaBloco *filabloco, tipo_erro *erro) // Imprimir o dado de um bloco específico da fila
 {
     if (filabloco==NULL){
-        return ERRO1; 
+        *erro = ERRO_NULL;
+        return; 
     }
+    *erro = SUCESSO;
     printf("%s", filabloco->dado);
 }

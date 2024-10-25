@@ -1,6 +1,7 @@
 #ifndef FILA_H // Verifica se FILA_H não foi definido
 #define FILA_H
 
+#include "erro.h"
 #include <stdbool.h>
 
 // Define o tipo elem_fila como char
@@ -19,30 +20,30 @@ typedef struct{
 }Fila;
 
 //  Inicializar uma nova fila e a retorna
-Fila* fila_init();
+Fila* fila_init(tipo_erro *erro);
 
 //  Verificar se a fila está vazia
-int fila_vazia(Fila *f);
+bool fila_vazia(Fila *f, tipo_erro *erro);
 
 //  Adicionar um novo elemento à fila
-int fila_push(Fila *f, elem_fila *dado);
+void fila_push(Fila *f, elem_fila *dado, tipo_erro *erro);
 
 //  Remover e retornar o bloco do início da fila
-FilaBloco *fila_pop(Fila *f);
+FilaBloco *fila_pop(Fila *f, tipo_erro *erro);
 
 //  Imprimir os elementos da fila
-int fila_print(Fila *fila);
+void fila_print(Fila *fila, tipo_erro *erro);
 
 //  Verificar se um elemento está presente na fila
-FilaBloco *fila_verifica_elem(Fila*f, elem_fila *dado);
+FilaBloco *fila_verifica_elem(Fila*f, elem_fila *dado, tipo_erro *erro);
 
 //  Liberar a memória ocupada pela fila
-int fila_libera(Fila *f);
+void fila_libera(Fila *f, tipo_erro *erro);
 
 //  Retornar o número total de elementos na fila
-int fila_total(Fila *f);
+int fila_total(Fila *f, tipo_erro *erro);
 
 //  Imprimir o dado de um bloco específico da fila
-int fila_bloco_print(FilaBloco *filabloco);
+void fila_bloco_print(FilaBloco *filabloco, tipo_erro *erro);
 
 #endif

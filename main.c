@@ -9,7 +9,7 @@
 
 /* Protótipos das funções */
 void cadastra_produto(Lista *Lista_Prod, tipo_erro *erro);
-int dar_lance(Lista *Lista_Prod, Fila *fila_usuario_geral, tipo_erro *erro);
+void dar_lance(Lista *Lista_Prod, Fila *fila_usuario_geral, tipo_erro *erro);
 void lista_produtos(Lista *Lista_Prod, tipo_erro *erro);
 void avisa_usuario(Lista *Lista_Prod, Fila *fila_usuario_geral);
 void encerra(Lista *Lista_Prod, tipo_erro *erro);
@@ -85,7 +85,6 @@ void cadastra_produto(Lista *Lista_Prod, tipo_erro *erro) //  Apenas cadastra o 
   strcpy(produto, nome);
 
   lista_push(Lista_Prod, produto, erro); //ok
-  
   if (*erro == SUCESSO){
     printf("Produto cadastrado com sucesso!\n");
   }else if(*erro == ERRO_ELEM_REPETIDO){
@@ -95,13 +94,13 @@ void cadastra_produto(Lista *Lista_Prod, tipo_erro *erro) //  Apenas cadastra o 
   }
 }
 
-int dar_lance(Lista *Lista_Prod, Fila *fila_usuario_geral, tipo_erro *erro) //Função para receber e registrar um lance, além de adicionar os usuários
-                                                           //do lance para a lista de usuários
+void dar_lance(Lista *Lista_Prod, Fila *fila_usuario_geral, tipo_erro *erro) //Função para receber e registrar um lance, além de adicionar os usuários
+                                                                             //do lance para a lista de usuários
 {
   printf("Entre com seu nome: ");
   char aux_nome[50];
   scanf(" %s", aux_nome);
-  fila_push(fila_usuario_geral, aux_nome);
+  fila_push(fila_usuario_geral, aux_nome, erro);
 
   printf("Entre com o valor do lance: R$ ");
   float aux_lance;
@@ -112,6 +111,10 @@ int dar_lance(Lista *Lista_Prod, Fila *fila_usuario_geral, tipo_erro *erro) //Fu
   scanf(" %s", aux_produto);
 
   ListaBloco *lance = lista_verifica_elem(Lista_Prod, aux_produto, erro);
+  if(*erro != SUCESSO){
+    printf("Erro ao verificar se o elemento está na lista\n");
+    return;
+  }
   if (lance == NULL)
   {
     printf("Produto não encontrado\n");
@@ -120,21 +123,28 @@ int dar_lance(Lista *Lista_Prod, Fila *fila_usuario_geral, tipo_erro *erro) //Fu
   {
     if (lance->fila_usu == NULL)
     {
-      printf("Erro de alocação");
-      return ERRO23;
+      //printf("Fila de usuários do produto não inicializada");
+      *erro = ERRO_NULL;
+      return;
     }
 
     if (lance->fila_usu->inicio == NULL)
     { // se a fila de usuários do produto do lance está vazia (vendo se o inicio aponta para nada, isto é, a lista está vazia mas está inicializada)
-      // lance->fila_usu = fila_init();
-      fila_push(lance->fila_usu, aux_nome);
+      fila_push(lance->fila_usu, aux_nome, erro);
+      if(*erro != SUCESSO){
+        printf("Erro ao inserir usuário.");
+      }
     }
     else
     {
-      FilaBloco *aux = fila_verifica_elem(lance->fila_usu, aux_nome);
+      FilaBloco *aux = fila_verifica_elem(lance->fila_usu, aux_nome, erro);
+      
       if (aux == NULL)
       { // é o primeiro lance do usuário no produto
-        fila_push(lance->fila_usu, aux_nome);
+        fila_push(lance->fila_usu, aux_nome, erro);
+        if(*erro != SUCESSO){
+          printf("Erro ao inserir usuário.");
+        }
       }
     }
 
@@ -145,7 +155,7 @@ int dar_lance(Lista *Lista_Prod, Fila *fila_usuario_geral, tipo_erro *erro) //Fu
     }
     else
     {
-      PilhaBloco *n = pilha_print_topo(lance->pilha, erro);
+      PilhaBloco *n = pilha_print_topo(lance->pilha, erro); //não precisa validar erro, pois a função pilha_vazia já fez isso
       if (n->dado <= aux_lance)
       {
         pilha_push(lance->pilha, &aux_lance, aux_nome, erro);
@@ -184,7 +194,7 @@ void lista_produtos(Lista *Lista_Prod, tipo_erro *erro) // Esta função vai mos
       FilaBloco *aux_fila = aux_pilha->fila->inicio;
       while (aux_fila != NULL)
       {
-        fila_bloco_print(aux_fila); // printa o nome do usuario na fila
+        fila_bloco_print(aux_fila, erro); // printa o nome do usuario na fila
         if (aux_fila->proximo != NULL)
         {
           printf(", ");
@@ -232,7 +242,7 @@ void libera_mem(Lista *Lista_Prod, tipo_erro *erro) //Função para liberar a me
     while (t != NULL)
     {
       Fila *f = t->fila;
-      fila_libera(f);
+      fila_libera(f, erro);
       t = t->anterior;
     }
     pilha_libera(p, erro);
@@ -254,7 +264,7 @@ int main() //Função principal, onde é exibida as opções de manipulação do
   if(erro != SUCESSO){
     printf("Erro ao inicializar a lista");
   }
-  Fila *fila_usuario_geral = fila_init();
+  Fila *fila_usuario_geral = fila_init(&erro);
 
   do
   {
@@ -319,7 +329,7 @@ int main() //Função principal, onde é exibida as opções de manipulação do
   } while (comando != 5);
 
   libera_mem(Lista_Prod, &erro);
-  fila_libera(fila_usuario_geral);
+  fila_libera(fila_usuario_geral, &erro);
 
   return 0;
 }

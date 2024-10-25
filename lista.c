@@ -4,7 +4,6 @@
 #include <locale.h>
 #include <string.h>
 #include <stdlib.h>
-#include <assert.h>
 
 Lista *lista_init(tipo_erro *erro)  //ok
 {

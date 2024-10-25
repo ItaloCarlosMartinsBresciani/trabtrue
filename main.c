@@ -15,9 +15,9 @@ void avisa_usuario(Lista *Lista_Prod, Fila *fila_usuario_geral);
 void encerra(Lista *Lista_Prod, tipo_erro *erro);
 void libera_mem(Lista *Lista_Prod, tipo_erro *erro);
 
-void avisa_usuario(Lista *Lista_Prod, Fila *fila_usuario_geral) //Essa função vai percorrer a lista de todos os usuários
-{                                                               //Para percorrer todos os produtos para percorrer a lista de usuários do produto
-                                                                //Se encontra vai pro proximo
+void avisa_usuario(Lista *Lista_Prod, Fila *fila_usuario_geral) // Essa função vai percorrer a lista de todos os usuários
+{                                                               // Para percorrer todos os produtos para percorrer a lista de usuários do produto
+  // Se encontra vai pro proximo
   // Verifique se as listas não são nulas
   if (Lista_Prod == NULL || fila_usuario_geral == NULL)
   {
@@ -38,7 +38,7 @@ void avisa_usuario(Lista *Lista_Prod, Fila *fila_usuario_geral) //Essa função 
     while (aux2 != NULL)
     {
       int count = 0;
-      
+
       FilaBloco *aux3 = aux2->fila_usu->inicio;
       while (aux3 != NULL)
       {
@@ -62,7 +62,7 @@ void avisa_usuario(Lista *Lista_Prod, Fila *fila_usuario_geral) //Essa função 
       // Verifica se aux3 não é nulo antes de usar
       if (count == aux2->fila_usu->total)
       {
-        printf("para %s: não gostaria de dar um lance pela %s?\n", aux->dado, aux2->dado);
+        printf("para %s: não gostaria de dar um lance pelo produto %s?\n", aux->dado, aux2->dado);
       }
       aux2 = aux2->proximo;
     }
@@ -84,18 +84,23 @@ void cadastra_produto(Lista *Lista_Prod, tipo_erro *erro) //  Apenas cadastra o 
   }
   strcpy(produto, nome);
 
-  lista_push(Lista_Prod, produto, erro); //ok
-  if (*erro == SUCESSO){
+  lista_push(Lista_Prod, produto, erro); // ok
+  if (*erro == SUCESSO)
+  {
     printf("Produto cadastrado com sucesso!\n");
-  }else if(*erro == ERRO_ELEM_REPETIDO){
+  }
+  else if (*erro == ERRO_ELEM_REPETIDO)
+  {
     printf("Produto já cadastrado! Tente outra vez.\n");
-  }else{
+  }
+  else
+  {
     printf("Erro ao inserir elemento na lista");
   }
 }
 
-void dar_lance(Lista *Lista_Prod, Fila *fila_usuario_geral, tipo_erro *erro) //Função para receber e registrar um lance, além de adicionar os usuários
-                                                                             //do lance para a lista de usuários
+void dar_lance(Lista *Lista_Prod, Fila *fila_usuario_geral, tipo_erro *erro) // Função para receber e registrar um lance, além de adicionar os usuários
+                                                                             // do lance para a lista de usuários
 {
   printf("Entre com seu nome: ");
   char aux_nome[50];
@@ -111,7 +116,9 @@ void dar_lance(Lista *Lista_Prod, Fila *fila_usuario_geral, tipo_erro *erro) //F
   scanf(" %s", aux_produto);
 
   ListaBloco *lance = lista_verifica_elem(Lista_Prod, aux_produto, erro);
-  if(*erro != SUCESSO){
+  if (*erro != SUCESSO)
+  {
+    // ERRO TRATADO
     printf("Erro ao verificar se o elemento está na lista\n");
     return;
   }
@@ -123,45 +130,83 @@ void dar_lance(Lista *Lista_Prod, Fila *fila_usuario_geral, tipo_erro *erro) //F
   {
     if (lance->fila_usu == NULL)
     {
-      //printf("Fila de usuários do produto não inicializada");
-      *erro = ERRO_NULL;
+      // printf("Fila de usuários do produto não inicializada");
+      *erro = ERRO_NULL; // Tentativa de acesso a um ponteiro nulo
       return;
     }
 
-    if (lance->fila_usu->inicio == NULL)
-    { // se a fila de usuários do produto do lance está vazia (vendo se o inicio aponta para nada, isto é, a lista está vazia mas está inicializada)
+    if (lance->fila_usu->inicio == NULL) // se a fila de usuários do produto do lance está vazia
+    {
       fila_push(lance->fila_usu, aux_nome, erro);
-      if(*erro != SUCESSO){
-        printf("Erro ao inserir usuário.");
+      if (*erro != SUCESSO)
+      { // ERRO TRATADO;
+        printf("Erro ao inserir usuário.\n");
       }
     }
     else
     {
       FilaBloco *aux = fila_verifica_elem(lance->fila_usu, aux_nome, erro);
-      
+      if (*erro != SUCESSO)
+      { // ERRO TRATADO
+        printf("Erro ao inserir usuário.\n");
+      }
       if (aux == NULL)
       { // é o primeiro lance do usuário no produto
         fila_push(lance->fila_usu, aux_nome, erro);
-        if(*erro != SUCESSO){
-          printf("Erro ao inserir usuário.");
+        if (*erro != SUCESSO)
+        { // ERRO TRATATADO
+          printf("Erro ao inserir usuário.\n");
         }
       }
     }
 
     if (pilha_vazia(lance->pilha, erro) == true)
     {
+      if (*erro != SUCESSO)
+      { // ERRO TRATADO
+        printf("Erro ao verificar se não há lances.\n");
+        return;
+      }
       pilha_push(lance->pilha, &aux_lance, aux_nome, erro);
-      printf("Lance cadastrado com sucesso!\n");
+      if (*erro != SUCESSO)
+      { // ERRO TRATADO
+        printf("Erro ao inserir um lance.\n");
+        return;
+      }
+      printf("Lance cadastrado com sucesso!");
     }
     else
     {
-      PilhaBloco *n = pilha_print_topo(lance->pilha, erro); //não precisa validar erro, pois a função pilha_vazia já fez isso
-      if (n->dado <= aux_lance)
+      PilhaBloco *n = pilha_print_topo(lance->pilha, erro); // precisa verificar
+      if (*erro != SUCESSO)
+      { // ERRO TRATADO;
+        printf("Erro ao acessar o último lance.\n");
+      }
+      if (n->dado < aux_lance) // verifica se o usuário está dando um lance novo e maior
       {
         pilha_push(lance->pilha, &aux_lance, aux_nome, erro);
+        if (*erro != SUCESSO)
+        { //ERRO TRATADO
+          printf("Erro ao inserir um lance.\n");
+          return;
+        }
+        printf("Lance cadastrado com sucesso!\n");
+      } // a lógica de verificação se o usuário deu lance repetido:
+      else if ( (n->dado == aux_lance) &&  (strcmp(n->fila->inicio->dado, aux_nome) == 0) ) // verifica se o usuário está dando um lance repetido (lance igual ao maior, o qual ele mesmo deu)
+      { 
+        printf("Você já deu um lance de %.2f por %s\n", aux_lance, aux_produto);
+      }
+      else if((n->dado == aux_lance)) 
+      { // verifica se o usuário está dando um lance igual ao valor do maior lance
+        pilha_push(lance->pilha, &aux_lance, aux_nome, erro);
+        if (*erro != SUCESSO)
+        { //ERRO TRATADO
+          printf("Erro ao inserir um lance.\n");
+          return;
+        }
         printf("Lance cadastrado com sucesso!\n");
       }
-      else
+      else // o usuário está dando um lance menor que o lance maior
       {
         printf("Seu lance pelo produto %s não foi aceito. Você precisa dar um lance maior!\n", aux_produto);
       }
@@ -208,7 +253,7 @@ void lista_produtos(Lista *Lista_Prod, tipo_erro *erro) // Esta função vai mos
   }
 }
 
-void encerra(Lista *Lista_Prod, tipo_erro *erro) //Função para encerrrar o leilão, mostrando os usuários que deram o lance no topo da pilha
+void encerra(Lista *Lista_Prod, tipo_erro *erro) // Função para encerrrar o leilão, mostrando os usuários que deram o lance no topo da pilha
 {
   ListaBloco *aux = Lista_Prod->inicio;
   while (aux != NULL)
@@ -231,7 +276,7 @@ void encerra(Lista *Lista_Prod, tipo_erro *erro) //Função para encerrrar o lei
   printf("Leilão encerrado.\n");
 }
 
-void libera_mem(Lista *Lista_Prod, tipo_erro *erro) //Função para liberar a meméria da lista de produtos cadastrados (e as estruturas ligadas a ela)
+void libera_mem(Lista *Lista_Prod, tipo_erro *erro) // Função para liberar a meméria da lista de produtos cadastrados (e as estruturas ligadas a ela)
 {
   ListaBloco *l = Lista_Prod->inicio;
   while (l != NULL)
@@ -252,7 +297,7 @@ void libera_mem(Lista *Lista_Prod, tipo_erro *erro) //Função para liberar a me
   lista_libera(Lista_Prod, erro);
 }
 
-int main() //Função principal, onde é exibida as opções de manipulação do Leilão
+int main() // Função principal, onde é exibida as opções de manipulação do Leilão
 {
   setlocale(LC_ALL, "");
   printf("Caro usuário, suas opções são:\n\t1)  cadastrar um produto\n\t2)  listar produtos e lances\n\t3)  dar um lance\n\t4)  listar outros produtos para lances\n\t5)  encerrar leilão\n\n");
@@ -261,7 +306,8 @@ int main() //Função principal, onde é exibida as opções de manipulação do
   int cont_cadastros = 0;
 
   Lista *Lista_Prod = lista_init(&erro);
-  if(erro != SUCESSO){
+  if (erro != SUCESSO)
+  {
     printf("Erro ao inicializar a lista");
   }
   Fila *fila_usuario_geral = fila_init(&erro);
@@ -286,6 +332,7 @@ int main() //Função principal, onde é exibida as opções de manipulação do
     case 1: // cadastra um produto
       printf("Resposta: 1\n");
       cadastra_produto(Lista_Prod, &erro);
+      // Possíveis erros do cadastra_produto foram tratados na função
       cont_cadastros++;
       printf("\n");
       break;

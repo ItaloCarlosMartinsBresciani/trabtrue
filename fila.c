@@ -25,11 +25,15 @@ int fila_vazia(Fila *f)
     else
         return 0;
 }
-void fila_push(Fila *f, elem_fila *dado)
+void fila_push(Fila *f, elem_fila *dado) //fila sem repetição
 {
     if (f != NULL)
     { // se a fila existir
         FilaBloco *p = (FilaBloco *)malloc(sizeof(FilaBloco));
+        //verificando se o dado a ser colocado na fila já está lá
+        if(fila_verifica_elem(f, dado) != NULL){
+            return; // sai da função e não faz nada
+        }
         if (p != NULL)
         {
             p->dado = (elem_fila *)malloc(sizeof(elem_fila));
@@ -74,18 +78,10 @@ void fila_print(Fila *f)
 {
     if (f != NULL || f->inicio != NULL) // Corrigido para usar '&&'
     {
-       
-
     FilaBloco *p = f->inicio;
-    
     while (p != NULL)
     {        
-        if (p->proximo == f->fim){
-            printf("%s ", p->dado);
-        }else{
-            printf("%s, ", p->dado);
-        }
-        
+        printf("%s\n", p->dado);
         p = p->proximo;
     }
     printf("\n");}
@@ -124,17 +120,6 @@ FilaBloco *fila_verifica_elem(Fila *f, elem_fila *dado)
 }
 int fila_total(Fila*f){
     return f->total;
-}
-
-void push_fila_usuario(Fila *F, elem_fila *dado){ //fila de usuarios sem repetição
-
-    if (!fila_vazia(F)){  //se tiver vazia
-        fila_push(F,dado); //dá um push na fila
-    }else{
-        if (fila_verifica_elem(F,dado)==NULL){ //verifica se o dado já está na fila
-            fila_push(F,dado); //só dá um push se não tiver
-        }
-    }
 }
 
 void fila_bloco_print(FilaBloco *filabloco){

@@ -78,21 +78,11 @@ void pilha_print(Pilha *pilha)
     PilhaBloco *aux = pilha->topo;
     while (aux != NULL)
     {
-      
-      if (aux->fila->total > 1){
-        printf("\t\t%d lances de R$", aux->fila->total);
-      }else{
-        printf("\t\t%d lance de R$", aux->fila->total);
-      }
       printf("%.2f: ", aux->dado); 
-
-      fila_print(aux->fila);
       aux = aux->anterior;
     }
   }
 }
-
-
 
 void pilha_libera(Pilha *pilha)
 {

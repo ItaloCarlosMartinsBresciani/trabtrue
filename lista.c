@@ -52,13 +52,11 @@ void lista_print(Lista *lista)
 {
     if (!lista_vazia(lista))
     {
-
         ListaBloco *bloco = lista->inicio;
 
         while (bloco != NULL)
         {
             printf("\t%s\n", bloco->dado);
-            pilha_print(bloco->pilha);
             bloco = bloco->proximo;
         }
     }

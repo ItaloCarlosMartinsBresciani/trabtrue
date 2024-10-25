@@ -18,7 +18,7 @@ typedef struct{
     int total; // Total de elementos na fila
 }Fila;
 
-//  Inicializar uma nova fila
+//  Inicializar uma nova fila e a retorna
 Fila* fila_init();
 
 //  Verificar se a fila está vazia
@@ -42,7 +42,7 @@ int fila_libera(Fila *f);
 //  Retornar o número total de elementos na fila
 int fila_total(Fila *f);
 
-//  Imprimir os dados de um bloco específico da fila
+//  Imprimir o dado de um bloco específico da fila
 int fila_bloco_print(FilaBloco *filabloco);
 
 #endif

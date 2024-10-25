@@ -30,10 +30,10 @@ typedef struct Lista
 Lista *lista_init(tipo_erro *erro);
 
 //  Adicionar um novo elemento na lista
-int lista_push(Lista *lista, elem_lista *dado, tipo_erro *erro);
+void lista_push(Lista *lista, elem_lista *dado, tipo_erro *erro);
 
 //  Remover e retornar o bloco do fim da lista
-ListaBloco *lista_pop(Lista *lista);
+ListaBloco *lista_pop(Lista *lista, tipo_erro *erro);
 
 //  Verificar se a lista está vazia
 bool lista_vazia(Lista *lista);

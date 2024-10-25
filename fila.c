@@ -6,7 +6,7 @@
 #include <stdbool.h>
 
 
-Fila *fila_init() // ok
+Fila *fila_init()
 {
     Fila *f = (Fila *)malloc(sizeof(Fila));
     if (f == NULL)
@@ -30,7 +30,7 @@ int fila_vazia(Fila *f) //tem que mudar para bool
     else
         return 0;
 }
-int fila_push(Fila *f, elem_fila *dado) /*int *erro*/ // fila sem repetição
+int fila_push(Fila *f, elem_fila *dado) //Adiciona uma elemento na fila
 {
     if (f == NULL)
         return ERRO1;
@@ -68,7 +68,7 @@ int fila_push(Fila *f, elem_fila *dado) /*int *erro*/ // fila sem repetição
     f->total++;
 }
 
-FilaBloco *fila_pop(Fila *f) // ok
+FilaBloco *fila_pop(Fila *f) // Remove um elemento e o retorna
 {
     if (f == NULL || f->inicio == NULL)
     {
@@ -80,9 +80,9 @@ FilaBloco *fila_pop(Fila *f) // ok
     f->total--;
     return p;
 }
-int fila_print(Fila *f /*, int *erro*/)
+int fila_print(Fila *f /*, int *erro*/) //printa a fila
 {
-    if (f == NULL || f->inicio == NULL) // Corrigido para usar '&&'
+    if (f == NULL || f->inicio == NULL)
         return ERRO1; // erro=0;
 
     FilaBloco *p = f->inicio;
@@ -109,7 +109,7 @@ int fila_libera(Fila *f /*, int *erro*/)
     }
     free(f);
 }
-FilaBloco *fila_verifica_elem(Fila *f, elem_fila *dado ) //ok
+FilaBloco *fila_verifica_elem(Fila *f, elem_fila *dado ) //Verifica se tem uma elemento, se o encontar o retorna
 {
     if (f != NULL || f->inicio != NULL)
     {
@@ -135,7 +135,7 @@ int fila_total(Fila *f /*, int *erro*/)
     return f->total;
 }
 
-int fila_bloco_print(FilaBloco *filabloco /*, int *erro*/)
+int fila_bloco_print(FilaBloco *filabloco /*, int *erro*/) // Imprimir o dado de um bloco específico da fila
 {
     if (filabloco==NULL){
         return ERRO1; 

@@ -34,7 +34,7 @@ bool lista_vazia(Lista *lista)  /*, int *erro*/
     }
 }
 
-ListaBloco *lista_pop(Lista *lista)  /*, int *erro*/
+ListaBloco *lista_pop(Lista *lista, tipo_erro *erro)  /*, int *erro*/
 {
     if (lista==NULL){ //verifica se a lista existe
         return NULL; 
@@ -59,6 +59,7 @@ ListaBloco *lista_pop(Lista *lista)  /*, int *erro*/
 
     return bloco_removido;
 }
+
 int lista_print(Lista *lista)  /*, int *erro*/
 {
     if (lista==NULL){
@@ -79,7 +80,7 @@ int lista_print(Lista *lista)  /*, int *erro*/
 void lista_push(Lista *lista, elem_lista *dado, tipo_erro *erro)  /*, int *erro*/
 {
     if (lista==NULL || dado==NULL){ //verifica se a lista existe e o dado existe
-        *erro = ERRO_NULL_POINTER // foi passado um ponteiro nulo para a função lista_push
+        *erro = ERRO_NULL_POINTER; // foi passado um ponteiro nulo para a função lista_push
         return; 
     }
     ListaBloco *Lista_bloco = (ListaBloco *)malloc(sizeof(ListaBloco)); //aloquei um bloco lista

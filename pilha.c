@@ -31,7 +31,7 @@ bool pilha_vazia(Pilha *pilha) //ok
   }
 }
 
-int pilha_push(Pilha *pilha, elem_pilha *dado, elem_fila *nome)  /*, int *erro*/
+int pilha_push(Pilha *pilha, elem_pilha *dado, elem_fila *nome)  // Insere uma valor na pilha de lances e inicia uma lista de usuario para cada um
 {
   if (pilha==NULL || dado==NULL || nome==NULL){
     return ERRO1; 
@@ -66,7 +66,7 @@ int pilha_push(Pilha *pilha, elem_pilha *dado, elem_fila *nome)  /*, int *erro*/
   }
 }
 
-PilhaBloco *pilha_pop(Pilha *pilha)  //ok
+PilhaBloco *pilha_pop(Pilha *pilha)
 {
   if (pilha==NULL){
     return NULL;
@@ -80,7 +80,7 @@ PilhaBloco *pilha_pop(Pilha *pilha)  //ok
   }
 }
 
-int pilha_print(Pilha *pilha)  /*, int *erro*/
+int pilha_print(Pilha *pilha)
 {
   if(pilha==NULL){
     return ERRO1; 

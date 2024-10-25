@@ -6,45 +6,51 @@
 #include <string.h>
 #include "lista.h"
 
-Pilha *pilha_init(void) //ok
+Pilha *pilha_init(tipo_erro *erro) //ok
 {
   Pilha *pilha = (Pilha *)malloc(sizeof(Pilha));
   if(pilha==NULL){
+    *erro = ERRO_NULL; // tentou usar ponteiro nulo
     return NULL;
   }
   pilha->topo = NULL;
+  *erro = SUCESSO;
   return pilha;
 }
 
-bool pilha_vazia(Pilha *pilha) //ok
+bool pilha_vazia(Pilha *pilha, tipo_erro *erro) //ok
 {
   if (pilha==NULL){
-    return ERRO1; 
+    *erro = ERRO_NULL;
+    return false; 
   }
   if (pilha->topo == NULL)
   {
+    *erro = SUCESSO;
     return true;
   }
   else
   {
+    *erro = SUCESSO;
     return false;
   }
 }
 
-int pilha_push(Pilha *pilha, elem_pilha *dado, elem_fila *nome)  // Insere uma valor na pilha de lances e inicia uma lista de usuario para cada um
+void pilha_push(Pilha *pilha, elem_pilha *dado, elem_fila *nome, tipo_erro *erro)  // Insere uma valor na pilha de lances e inicia uma lista de usuario para cada um
 {
   if (pilha==NULL || dado==NULL || nome==NULL){
-    return ERRO1; 
+    *erro = ERRO_NULL;
+    return; 
   }
   PilhaBloco *bloco = (PilhaBloco *)malloc(sizeof(PilhaBloco));
   if (bloco==NULL){
-    return ERRO1; 
+    *erro = ERRO_ALLOC; // falha de alocação de memória
+    return; 
   }
 
   Fila *fila;
-  
   bloco->dado = (*dado);
-  if (pilha_vazia(pilha))
+  if (pilha_vazia(pilha, erro))
   {
     pilha->topo = bloco;
     bloco->anterior = NULL;
@@ -64,28 +70,32 @@ int pilha_push(Pilha *pilha, elem_pilha *dado, elem_fila *nome)  // Insere uma v
     bloco->fila = fila;
     fila_push(fila, nome);
   }
+  *erro = SUCESSO;
 }
 
-PilhaBloco *pilha_pop(Pilha *pilha)
+PilhaBloco *pilha_pop(Pilha *pilha, tipo_erro *erro)
 {
   if (pilha==NULL){
+    *erro = ERRO_NULL; 
     return NULL;
   }
-  if (pilha_vazia(pilha) == false)
-  {
+  if (pilha_vazia(pilha, erro) == false)
+  { 
     PilhaBloco *aux = pilha->topo;
     pilha->topo = aux->anterior;
     aux->anterior = NULL;
+    *erro = SUCESSO;
     return aux;
   }
 }
 
-int pilha_print(Pilha *pilha)
+void pilha_print(Pilha *pilha, tipo_erro *erro)
 {
   if(pilha==NULL){
-    return ERRO1; 
+    *erro = ERRO_NULL;
+    return; 
   }
-  if (!pilha_vazia(pilha))
+  if (!pilha_vazia(pilha, erro))
   {
     PilhaBloco *aux = pilha->topo;
     while (aux != NULL)
@@ -94,14 +104,16 @@ int pilha_print(Pilha *pilha)
       aux = aux->anterior;
     }
   }
+  *erro = SUCESSO;
 }
 
-int pilha_libera(Pilha *pilha)  /*, int *erro*/
+void pilha_libera(Pilha *pilha, tipo_erro *erro)  /*, int *erro*/
 {
   if (pilha==NULL){
-    return ERRO1; 
+    *erro = ERRO_NULL;
+    return; 
   }
-  if (!pilha_vazia(pilha))
+  if (!pilha_vazia(pilha, erro))
   {
     PilhaBloco *p = pilha->topo;
     while (p != NULL)
@@ -111,21 +123,30 @@ int pilha_libera(Pilha *pilha)  /*, int *erro*/
       free(temp);
     }
     pilha->topo = NULL;
+    *erro = SUCESSO;
   }
   free(pilha);
 }
 
-PilhaBloco *pilha_print_topo(Pilha *pilha)  /*, int *erro*/
+PilhaBloco *pilha_print_topo(Pilha *pilha, tipo_erro *erro)  /*, int *erro*/
 {
   if (pilha==NULL){
+    *erro = ERRO_NULL;
     return NULL; //erro
   }
-  if (pilha_vazia(pilha) == false)
+  if (pilha_vazia(pilha, erro) == false)
   {
+    *erro = SUCESSO;
     return pilha->topo;
   }
 }
 
-int pilha_bloco_print(PilhaBloco *pilhabloco){
+void pilha_bloco_print(PilhaBloco *pilhabloco, tipo_erro *erro)
+{
+    if(pilhabloco == NULL){
+      *erro = ERRO_NULL; // tentou acessar um bloco nulo
+      return;
+    }
     printf("%.2f", pilhabloco->dado);
+    return;
 }

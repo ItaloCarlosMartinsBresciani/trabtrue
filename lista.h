@@ -36,18 +36,18 @@ void lista_push(Lista *lista, elem_lista *dado, tipo_erro *erro);
 ListaBloco *lista_pop(Lista *lista, tipo_erro *erro);
 
 //  Verificar se a lista está vazia
-bool lista_vazia(Lista *lista);
+bool lista_vazia(Lista *lista, tipo_erro *erro); // erro implementado até aqui
 
 //  Imprimir os elementos da lista
-int lista_print(Lista *lista);
+void lista_print(Lista *lista, tipo_erro *erro); // erro implement até aqui
 
 //  Liberar a memória ocupada pela lista
-int lista_libera(Lista *lista);
+void lista_libera(Lista *lista, tipo_erro *erro); // erro implement
 
 //  Verificar se um elemento tá presente na lista
-ListaBloco *lista_verifica_elem(Lista *lista, elem_lista *dado);
+ListaBloco *lista_verifica_elem(Lista *lista, elem_lista *dado, tipo_erro *erro);
 
 //  Imprimir os dados de um bloco específico da lista
-int lista_bloco_print(ListaBloco *listabloco);
+void lista_bloco_print(ListaBloco *listabloco, tipo_erro *erro);
 
 #endif

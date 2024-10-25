@@ -85,15 +85,13 @@ void cadastra_produto(Lista *Lista_Prod, tipo_erro *erro) //  Apenas cadastra o 
   strcpy(produto, nome);
 
   lista_push(Lista_Prod, produto, erro);
-  if(*erro != SUCESSO){
-    printf("Erro ao inserir elemento na lista");
-  }
   
-
   if (*erro == SUCESSO){
     printf("Produto cadastrado com sucesso!\n");
-  }else{
+  }else if(*erro == ERRO_ELEM_REPETIDO){
     printf("Produto já cadastrado! Tente outra vez.\n");
+  }else{
+    printf("Erro ao inserir elemento na lista");
   }
 }
 

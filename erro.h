@@ -8,12 +8,9 @@ typedef enum{
     SUCESSO, // Operação executada com sucesso (0)
     ERRO_ALLOC, // Erro de alocação de memória (1)
     ERRO_NULL_POINTER, // Tentativa de uso de um ponteiro nulo (2)
-    ERRO_ELEM_REPETIDO // Tentativa de inserção de elemento (3)
+    ERRO_ELEM_REPETIDO, // Tentativa de inserção de elemento (3)
+    ERRO_POP_VAZIO // Tentativa de retirar elemento em uma estrutura vazia (4)
 }tipo_erro;
-
-
-
-
 
 
 

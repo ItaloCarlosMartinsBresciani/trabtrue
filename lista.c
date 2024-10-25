@@ -6,15 +6,17 @@
 #include <stdlib.h>
 #include <assert.h>
 
-Lista *lista_init()  //ok
+Lista *lista_init(tipo_erro *erro)  //ok
 {
     Lista *lista = (Lista *)malloc(sizeof(Lista));
     if (lista==NULL){
-        return NULL;
+        *erro = ERRO_ALLOC; // erro de alocação de memória
+        return NULL; 
     }
     lista->fim = NULL;
     lista->inicio = NULL;
-    return lista;
+    *erro = SUCESSO; // lista inicializada com sucesso
+    return lista;  
 }
 
 bool lista_vazia(Lista *lista)  /*, int *erro*/
@@ -74,15 +76,17 @@ int lista_print(Lista *lista)  /*, int *erro*/
     }
 }
 
-int lista_push(Lista *lista, elem_lista *dado)  /*, int *erro*/
+void lista_push(Lista *lista, elem_lista *dado, tipo_erro *erro)  /*, int *erro*/
 {
     if (lista==NULL || dado==NULL){ //verifica se a lista existe e o dado existe
-        return ERRO1; 
+        *erro = ERRO_NULL_POINTER // foi passado um ponteiro nulo para a função lista_push
+        return; 
     }
     ListaBloco *Lista_bloco = (ListaBloco *)malloc(sizeof(ListaBloco)); //aloquei um bloco lista
     
-    if (Lista_bloco==NULL){ //ve se deu pau
-        return ERRO1; 
+    if (Lista_bloco==NULL){ 
+        *erro = ERRO_ALLOC; // erro de alocação de memória
+        return; 
     }
     Lista_bloco->fila_usu = fila_init(); //inicializei
     Lista_bloco->dado = dado; //campo dado aponta o nome do produto
@@ -107,7 +111,8 @@ int lista_push(Lista *lista, elem_lista *dado)  /*, int *erro*/
     if (aux != NULL && strcmp(dado, aux->dado) == 0)
     {
         free(Lista_bloco);
-        return ERRO99;
+        *erro = ERRO_ELEM_REPETIDO; // Um elemento repetido foi tentar usar 
+        return; 
     }
     // Se estamos inserindo no início da lista (antes do primeiro elemento)
     if (ant == NULL)
@@ -128,7 +133,7 @@ int lista_push(Lista *lista, elem_lista *dado)  /*, int *erro*/
             lista->fim = Lista_bloco;
         Lista_bloco->anterior = ant;
     }
-    return SUCESSO;
+    *erro = SUCESSO;
 }
 
 int lista_libera(Lista *lista)  /*, int *erro*/

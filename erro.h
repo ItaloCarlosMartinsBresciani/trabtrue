@@ -1,10 +1,24 @@
-// erro.h - Definição de 100 códigos de erro
+// erro.h - Definição dos tipos de erro
 
 #ifndef ERRO_H
 #define ERRO_H
 
+
+typedef enum{
+    SUCESSO, // Operação executada com sucesso (0)
+    ERRO_ALLOC, // Erro de alocação de memória (1)
+    ERRO_NULL_POINTER, // Tentativa de uso de um ponteiro nulo (2)
+    ERRO_ELEM_REPETIDO // Tentativa de inserção de elemento (3)
+}tipo_erro;
+
+
+
+
+
+
+
 #define SUCESSO 0    // Sucesso
-#define ERRO1 1000   // Erro 1
+#define ERRO1 1000   // Erro 1: Falha ao alocar lista
 #define ERRO2 1001   // Erro 2
 #define ERRO3 1002   // Erro 3
 #define ERRO4 1003   // Erro 4
@@ -104,6 +118,9 @@
 #define ERRO98 1097  // Erro 98
 #define ERRO99 1098  // Erro 99
 #define ERRO100 1099 // Erro 100
+
+
+
 
 #endif // ERRO_H
 

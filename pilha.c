@@ -1,19 +1,26 @@
 #include "pilha.h"
+#include "erro.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "lista.h"
 
-Pilha *pilha_init(void)
+Pilha *pilha_init(void) //ok
 {
   Pilha *pilha = (Pilha *)malloc(sizeof(Pilha));
+  if(pilha==NULL){
+    return NULL;
+  }
   pilha->topo = NULL;
   return pilha;
 }
 
-bool pilha_vazia(Pilha *pilha)
+bool pilha_vazia(Pilha *pilha) //ok
 {
+  if (pilha==NULL){
+    return ERRO1; 
+  }
   if (pilha->topo == NULL)
   {
     return true;
@@ -24,16 +31,18 @@ bool pilha_vazia(Pilha *pilha)
   }
 }
 
-void pilha_push(Pilha *pilha, elem_pilha *dado, elem_fila *nome)
+int pilha_push(Pilha *pilha, elem_pilha *dado, elem_fila *nome)  /*, int *erro*/
 {
+  if (pilha==NULL || dado==NULL || nome==NULL){
+    return ERRO1; 
+  }
   PilhaBloco *bloco = (PilhaBloco *)malloc(sizeof(PilhaBloco));
+  if (bloco==NULL){
+    return ERRO1; 
+  }
 
   Fila *fila;
-  if (bloco == NULL)
-  {
-    // erro de alocação de memória
-    return;
-  }
+  
   bloco->dado = (*dado);
   if (pilha_vazia(pilha))
   {
@@ -57,8 +66,11 @@ void pilha_push(Pilha *pilha, elem_pilha *dado, elem_fila *nome)
   }
 }
 
-PilhaBloco *pilha_pop(Pilha *pilha)
+PilhaBloco *pilha_pop(Pilha *pilha)  //ok
 {
+  if (pilha==NULL){
+    return NULL;
+  }
   if (pilha_vazia(pilha) == false)
   {
     PilhaBloco *aux = pilha->topo;
@@ -68,11 +80,11 @@ PilhaBloco *pilha_pop(Pilha *pilha)
   }
 }
 
-
-
-
-void pilha_print(Pilha *pilha)
+int pilha_print(Pilha *pilha)  /*, int *erro*/
 {
+  if(pilha==NULL){
+    return ERRO1; 
+  }
   if (!pilha_vazia(pilha))
   {
     PilhaBloco *aux = pilha->topo;
@@ -84,8 +96,11 @@ void pilha_print(Pilha *pilha)
   }
 }
 
-void pilha_libera(Pilha *pilha)
+int pilha_libera(Pilha *pilha)  /*, int *erro*/
 {
+  if (pilha==NULL){
+    return ERRO1; 
+  }
   if (!pilha_vazia(pilha))
   {
     PilhaBloco *p = pilha->topo;
@@ -100,14 +115,17 @@ void pilha_libera(Pilha *pilha)
   free(pilha);
 }
 
-PilhaBloco *pilha_print_topo(Pilha *pilha)
+PilhaBloco *pilha_print_topo(Pilha *pilha)  /*, int *erro*/
 {
+  if (pilha==NULL){
+    return NULL; //erro
+  }
   if (pilha_vazia(pilha) == false)
   {
     return pilha->topo;
   }
 }
 
-void pilha_bloco_print(PilhaBloco *pilhabloco){
+int pilha_bloco_print(PilhaBloco *pilhabloco){
     printf("%.2f", pilhabloco->dado);
 }

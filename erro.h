@@ -3,6 +3,7 @@
 #ifndef ERRO_H
 #define ERRO_H
 
+#define SUCESSO 0    // Sucesso
 #define ERRO1 1000   // Erro 1
 #define ERRO2 1001   // Erro 2
 #define ERRO3 1002   // Erro 3

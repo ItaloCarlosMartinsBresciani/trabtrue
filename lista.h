@@ -23,13 +23,13 @@ typedef struct Lista
 } Lista;
 
 Lista *lista_init();
-void lista_push(Lista *lista, elem_lista *dado);
+int lista_push(Lista *lista, elem_lista *dado);
 ListaBloco *lista_pop(Lista *lista);
 bool lista_vazia(Lista *lista);
 // void lista_print_inv(Lista *lista);
-void lista_print(Lista *lista);
-void lista_libera(Lista *lista);
+int lista_print(Lista *lista);
+int lista_libera(Lista *lista);
 ListaBloco *lista_verifica_elem(Lista *lista, elem_lista *dado);
+int lista_bloco_print(ListaBloco *listabloco);
 
-void lista_bloco_print(ListaBloco *listabloco);
 #endif

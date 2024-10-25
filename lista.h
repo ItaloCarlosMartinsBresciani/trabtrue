@@ -12,6 +12,7 @@ typedef struct ListaBloco
     struct ListaBloco *proximo;
     struct ListaBloco *anterior;
     Pilha *pilha;
+    Fila *fila_usu;
     elem_lista *dado;
 } ListaBloco;
 

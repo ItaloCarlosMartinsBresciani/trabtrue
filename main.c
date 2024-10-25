@@ -1,6 +1,7 @@
 #include "lista.h"
 #include "pilha.h"
 #include "fila.h"
+#include "erro.h"
 #include <stdio.h>
 #include <locale.h>
 #include <string.h>
@@ -8,7 +9,7 @@
 
 /* Protótipos das funções */
 void cadastra_produto(Lista *Lista_Prod);
-void dar_lance(Lista *Lista_Prod, Fila *fila_usuario_geral);
+int dar_lance(Lista *Lista_Prod, Fila *fila_usuario_geral);
 void lista_produtos(Lista *Lista_Prod);
 void avisa_usuario(Lista *Lista_Prod, Fila *fila_usuario_geral);
 void encerra(Lista *Lista_Prod);
@@ -16,77 +17,65 @@ void libera_mem(Lista *Lista_Prod);
 
 void avisa_usuario(Lista *Lista_Prod, Fila *fila_usuario_geral)
 {
-    
-    // Verifique se as listas não são nulas
-    if (Lista_Prod == NULL || fila_usuario_geral == NULL) {
-        return; // Retorne se uma das listas for nula
-    }
-    
-    FilaBloco *aux = fila_usuario_geral->inicio;
-    
-    // Verifique se a fila de usuários gerais está inicializada
-    if (aux == NULL) {
-        printf("Fila de usuários gerais está vazia.\n");
-        return;
-    }
 
-    while (aux != NULL)
+  // Verifique se as listas não são nulas
+  if (Lista_Prod == NULL || fila_usuario_geral == NULL)
+  {
+    return; // Retorne se uma das listas for nula
+  }
+
+  FilaBloco *aux = fila_usuario_geral->inicio;
+
+  while (aux != NULL)
+  {
+    ListaBloco *aux2 = Lista_Prod->inicio;
+    // Verifique se a lista de produtos está inicializada
+    if (aux2 == NULL)
     {
-        ListaBloco *aux2 = Lista_Prod->inicio;
-        
-        // Verifique se a lista de produtos está inicializada
-        if (aux2 == NULL) {
-            printf("Lista de produtos está vazia.\n");
-            return;
-        }
-
-        while (aux2 != NULL)
-        {
-            int count = 0;
-
-            // Verifique se a fila de usuários no produto está inicializada
-            if (aux2->fila_usu == NULL || aux2->fila_usu->inicio == NULL) {
-                printf("Fila de usuários do produto %s está vazia ou não inicializada.\n", aux2->dado);
-                aux2 = aux2->proximo;
-                continue; // Pule para o próximo produto se a fila não estiver inicializada
-            }
-
-            FilaBloco *aux3 = aux2->fila_usu->inicio;
-
-            while (aux3 != NULL)
-            {
-                // Verifique se os dados não são nulos antes de compará-los
-                if (aux->dado == NULL || aux3->dado == NULL) {
-                    printf("Dados nulos durante a comparação.\n");
-                    break;
-                }
-
-                if (strcmp(aux->dado, aux3->dado) != 0)
-                {
-                    count++;
-                }
-                else
-                {
-                    // Encontrou uma correspondência, não precisa continuar
-                    break;
-                }
-
-                aux3 = aux3->proximo;
-            }
-
-            // Verifique se aux3 não é nulo antes de usar
-            if (count == aux2->fila_usu->total)
-            {
-                printf("para %s: não gostaria de dar um lance pela %s?\n", aux->dado, aux2->dado);
-            }
-            
-            aux2 = aux2->proximo;
-        }
-
-        aux = aux->proximo;
+      printf("Lista de produtos está vazia.\n");
+      return;
     }
-}
+    while (aux2 != NULL)
+    {
+      int count = 0;
+      // Verifique se a fila de usuários no produto está inicializada (DEBUG)
+      ////if (aux2->fila_usu == NULL)
+      //{
+      //  printf("Fila de usuários do produto %s NÂO está inicializada\n", aux2->dado);
+      //  aux2 = aux2->proximo;
+      //  continue; // Pule para o próximo produto se a fila não estiver inicializada
+      //}
 
+      FilaBloco *aux3 = aux2->fila_usu->inicio;
+      while (aux3 != NULL)
+      {
+        // Verifique se os dados não são nulos antes de compará-los
+        if (aux->dado == NULL || aux3->dado == NULL)
+        {
+          printf("Dados nulos durante a comparação.\n");
+          break;
+        }
+        if (strcmp(aux->dado, aux3->dado) != 0)
+        {
+          count++;
+        }
+        else
+        {
+          // Encontrou uma correspondência, não precisa continuar
+          break;
+        }
+        aux3 = aux3->proximo;
+      }
+      // Verifique se aux3 não é nulo antes de usar
+      if (count == aux2->fila_usu->total)
+      {
+        printf("para %s: não gostaria de dar um lance pela %s?\n", aux->dado, aux2->dado);
+      }
+      aux2 = aux2->proximo;
+    }
+    aux = aux->proximo;
+  }
+}
 
 void cadastra_produto(Lista *Lista_Prod)
 {
@@ -104,9 +93,14 @@ void cadastra_produto(Lista *Lista_Prod)
 
   lista_push(Lista_Prod, produto);
   printf("Produto cadastrado com sucesso!\n");
+
+  // Fila *aux_fila_usu = fila_init();
+
+  // ListaBloco *aux_bloco_lista = Lista_Prod->fim;
+  // aux_bloco_lista->fila_usu = aux_fila_usu;
 }
 
-void dar_lance(Lista *Lista_Prod, Fila *fila_usuario_geral)
+int dar_lance(Lista *Lista_Prod, Fila *fila_usuario_geral)
 {
   printf("Entre com seu nome: ");
   char aux_nome[50];
@@ -128,19 +122,24 @@ void dar_lance(Lista *Lista_Prod, Fila *fila_usuario_geral)
   }
   else
   {
-    
-    if (lance->fila_usu == NULL){  // se a fila de usuários do produto do lance está vazia (não inicializada) 
-        
-        lance->fila_usu = fila_init();
+    if (lance->fila_usu == NULL)
+    {
+      printf("Erro de alocação");
+      return ERRO23;
+    }
+
+    if (lance->fila_usu->inicio == NULL)
+    { // se a fila de usuários do produto do lance está vazia (vendo se o inicio aponta para nada, isto é, a lista está vazia mas está inicializada)
+      // lance->fila_usu = fila_init();
+      fila_push(lance->fila_usu, aux_nome);
+    }
+    else
+    {
+      FilaBloco *aux = fila_verifica_elem(lance->fila_usu, aux_nome);
+      if (aux == NULL)
+      { // é o primeiro lance do usuário no produto
         fila_push(lance->fila_usu, aux_nome);
-        
-    }else{
-        
-        FilaBloco *aux = fila_verifica_elem(lance->fila_usu, aux_nome);
-        if (aux == NULL){ //é o primeiro lance do usuário no produto
-          
-          fila_push(lance->fila_usu, aux_nome);
-        }
+      }
     }
 
     if (pilha_vazia(lance->pilha) == true)
@@ -257,18 +256,20 @@ int main()
 
   Lista *Lista_Prod = lista_init();
   Fila *fila_usuario_geral = fila_init();
-  
+
   do
   {
     printf("O que deseja fazer? ");
     int resultado = scanf("%d", &comando);
 
     // Se scanf não conseguiu ler um inteiro (resultado == 0), exibe erro
-    if (resultado != 1) {
-            printf("Comando inválido!\n");
-            printf("\n");
-            while (getchar() != '\n'); // Remove qualquer caractere extra deixado no buffer
-            continue; // Volta para o começo do do while
+    if (resultado != 1)
+    {
+      printf("Comando inválido!\n");
+      printf("\n");
+      while (getchar() != '\n')
+        ;       // Remove qualquer caractere extra deixado no buffer
+      continue; // Volta para o começo do do while
     }
 
     switch (comando)

@@ -64,6 +64,7 @@ int fila_push(Fila *f, elem_fila *dado) /*int *erro*/ // fila sem repetição
         temp->proximo = p;
         p->proximo = NULL;
     }
+    f->fim=p;
     f->total++;
 }
 

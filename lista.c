@@ -76,15 +76,17 @@ int lista_print(Lista *lista)  /*, int *erro*/
 
 int lista_push(Lista *lista, elem_lista *dado)  /*, int *erro*/
 {
-    if (lista==NULL || dado==NULL){
+    if (lista==NULL || dado==NULL){ //verifica se a lista existe e o dado existe
         return ERRO1; 
     }
-    ListaBloco *Lista_bloco = (ListaBloco *)malloc(sizeof(ListaBloco));
-    if (Lista_bloco==NULL){
+    ListaBloco *Lista_bloco = (ListaBloco *)malloc(sizeof(ListaBloco)); //aloquei um bloco lista
+    
+    if (Lista_bloco==NULL){ //ve se deu pau
         return ERRO1; 
     }
-    Lista_bloco->fila_usu=NULL;
-    Lista_bloco->dado = dado;
+    Lista_bloco->fila_usu = fila_init(); //inicializei
+    Lista_bloco->dado = dado; //campo dado aponta o nome do produto
+    
     Pilha *P = pilha_init();
     Lista_bloco->pilha = P;
 
@@ -92,34 +94,40 @@ int lista_push(Lista *lista, elem_lista *dado)  /*, int *erro*/
     aux = lista->inicio;
     ant = NULL;
 
+    // Navega pela lista até encontrar a posição de inserção
+    // ou um elemento igual ao dado
+
     while (aux != NULL && strcmp(dado, aux->dado) > 0)
     {
         ant = aux;
         aux = aux->proximo;
     }
+
+    // Se o elemento já existe na lista (dado é igual)
     if (aux != NULL && strcmp(dado, aux->dado) == 0)
     {
         free(Lista_bloco);
         return SUCESSO;
     }
+    // Se estamos inserindo no início da lista (antes do primeiro elemento)
     if (ant == NULL)
     {
         Lista_bloco->proximo = lista->inicio;
         if (lista->inicio != NULL)
             lista->inicio->anterior = Lista_bloco;
         lista->inicio = Lista_bloco;
+        lista->fim = Lista_bloco;
     }
-    else
+    else // Inserção em qualquer lugar depois do primeiro elemento
     {
         Lista_bloco->proximo = ant->proximo;
         ant->proximo = Lista_bloco;
-        if (Lista_bloco->proximo != NULL)
+        if (Lista_bloco->proximo != NULL) // Se há um bloco após o novo bloco
             Lista_bloco->proximo->anterior = Lista_bloco;
-        else
+        else // Se não há próximo, atualiza o final da lista
             lista->fim = Lista_bloco;
         Lista_bloco->anterior = ant;
     }
-    
 }
 
 int lista_libera(Lista *lista)  /*, int *erro*/

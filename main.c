@@ -141,6 +141,7 @@ void dar_lance(Lista *Lista_Prod, Fila *fila_usuario_geral, tipo_erro *erro) // 
       if (*erro != SUCESSO)
       { // ERRO TRATADO;
         printf("Erro ao inserir usuário.\n");
+        return;
       }
     }
     else
@@ -156,6 +157,7 @@ void dar_lance(Lista *Lista_Prod, Fila *fila_usuario_geral, tipo_erro *erro) // 
         if (*erro != SUCESSO)
         { // ERRO TRATATADO
           printf("Erro ao inserir usuário.\n");
+          return;
         }
       }
     }
@@ -180,27 +182,28 @@ void dar_lance(Lista *Lista_Prod, Fila *fila_usuario_geral, tipo_erro *erro) // 
       PilhaBloco *n = pilha_print_topo(lance->pilha, erro); // precisa verificar
       if (*erro != SUCESSO)
       { // ERRO TRATADO;
-        printf("Erro ao acessar o último lance.\n");
+        printf("Erro ao acessar lance.\n");
+        return;
       }
       if (n->dado < aux_lance) // verifica se o usuário está dando um lance novo e maior
       {
         pilha_push(lance->pilha, &aux_lance, aux_nome, erro);
         if (*erro != SUCESSO)
-        { //ERRO TRATADO
+        { // ERRO TRATADO
           printf("Erro ao inserir um lance.\n");
           return;
         }
         printf("Lance cadastrado com sucesso!\n");
       } // a lógica de verificação se o usuário deu lance repetido:
-      else if ( (n->dado == aux_lance) &&  (strcmp(n->fila->inicio->dado, aux_nome) == 0) ) // verifica se o usuário está dando um lance repetido (lance igual ao maior, o qual ele mesmo deu)
-      { 
-        printf("Você já deu um lance de %.2f por %s\n", aux_lance, aux_produto);
+      else if ((n->dado == aux_lance) && (strcmp(n->fila->inicio->dado, aux_nome) == 0)) // verifica se o usuário está dando um lance repetido (lance igual ao maior, o qual ele mesmo deu)
+      {
+        printf("Você já deu um lance de %.2f pelo produto %s.\n", aux_lance, aux_produto);
       }
-      else if((n->dado == aux_lance)) 
+      else if ((n->dado == aux_lance))
       { // verifica se o usuário está dando um lance igual ao valor do maior lance
         pilha_push(lance->pilha, &aux_lance, aux_nome, erro);
         if (*erro != SUCESSO)
-        { //ERRO TRATADO
+        { // ERRO TRATADO
           printf("Erro ao inserir um lance.\n");
           return;
         }
@@ -218,13 +221,23 @@ void dar_lance(Lista *Lista_Prod, Fila *fila_usuario_geral, tipo_erro *erro) // 
 
 void lista_produtos(Lista *Lista_Prod, tipo_erro *erro) // Esta função vai mostrar os produtos com seus respectivos lances (mostrando nome e valor dos lances)
 {
-  ListaBloco *aux_lista = Lista_Prod->inicio;
+  ListaBloco *aux_lista = Lista_Prod->inicio; // fazendo um ponteiro auxiliar apontar para o bloco do início da lista de produtos
   while (aux_lista != NULL)
   {
     printf("\t");
     lista_bloco_print(aux_lista, erro); // printa o produto (bloco da lista de produtos)
+    if (*erro != SUCESSO)
+    { // ERRO TRATADO
+      printf("Erro ao imprimir produto.\n");
+      return; // sai da função porque há problemas com a lista de produtos
+    }
     printf("\n");
     PilhaBloco *aux_pilha = pilha_print_topo(aux_lista->pilha, erro);
+    if (*erro != SUCESSO)
+    { // ERRO TRATADO
+      printf("Erro ao acessar lance.\n");
+      return; // sai da função porque há problemas com a pilha de lances de um produto
+    }
 
     while (aux_pilha != NULL)
     {
@@ -235,11 +248,21 @@ void lista_produtos(Lista *Lista_Prod, tipo_erro *erro) // Esta função vai mos
         printf("\t\t%d lance de R$", aux_pilha->fila->total);
       }
       pilha_bloco_print(aux_pilha, erro); // printa o valor do produto (elemento do bloco da pilha)
+      if (*erro != SUCESSO)
+      { // ERRO TRATADO
+        printf("Erro ao acessar lance.\n");
+        return; // sai da função porque há problemas com a pilha de lances de um produto
+      }
       printf(": ");
       FilaBloco *aux_fila = aux_pilha->fila->inicio;
       while (aux_fila != NULL)
       {
         fila_bloco_print(aux_fila, erro); // printa o nome do usuario na fila
+        if (*erro != SUCESSO)
+        { // ERRO TRATADO
+          printf("Erro ao acessar usuário.\n");
+          return; // sai da função porque há problemas com a fila de usuarios do produto
+        }
         if (aux_fila->proximo != NULL)
         {
           printf(", ");
@@ -261,7 +284,17 @@ void encerra(Lista *Lista_Prod, tipo_erro *erro) // Função para encerrrar o le
     printf("\t%s: ", aux->dado);
     if (pilha_vazia(aux->pilha, erro) == false)
     {
+      if (*erro != SUCESSO)
+      {                                               // ERRO TRATADO
+        printf("Erro ao acessar pilha de lances.\n"); // há algo errado com a estrutura de pilha de lances
+        return;
+      }
       PilhaBloco *n = pilha_print_topo(aux->pilha, erro);
+      if (*erro != SUCESSO)
+      {                                               // ERRO TRATADO
+        printf("Erro ao acessar pilha de lances.\n"); // há algo errado com a estrutura de pilha de lances
+        return;
+      }
       FilaBloco *usuario = n->fila->inicio;
 
       printf("%s ", usuario->dado);
@@ -283,18 +316,39 @@ void libera_mem(Lista *Lista_Prod, tipo_erro *erro) // Função para liberar a m
   {
     Pilha *p = l->pilha;
     PilhaBloco *t = pilha_print_topo(l->pilha, erro);
+    if (*erro != SUCESSO)
+    {
+      printf("Erro ao acessar pilha de lances ao liberar memória\n");
+      return;
+    }
 
     while (t != NULL)
     {
       Fila *f = t->fila;
       fila_libera(f, erro);
+      if (*erro != SUCESSO)
+      {
+        printf("Erro ao acessar lista de usuários de um lance na liberação de memória\n");
+        return;
+      }
+
       t = t->anterior;
     }
     pilha_libera(p, erro);
+    if (*erro != SUCESSO)
+    {
+      printf("Erro ao acessar lances na liberação de memória\n");
+      return;
+    }
 
     l = l->proximo;
   }
   lista_libera(Lista_Prod, erro);
+  if (*erro != SUCESSO)
+  {
+    printf("Erro ao acessar lista de produtos na liberação de memória\n");
+    return;
+  }
 }
 
 int main() // Função principal, onde é exibida as opções de manipulação do Leilão
@@ -332,7 +386,7 @@ int main() // Função principal, onde é exibida as opções de manipulação d
     case 1: // cadastra um produto
       printf("Resposta: 1\n");
       cadastra_produto(Lista_Prod, &erro);
-      // Possíveis erros do cadastra_produto foram tratados na função
+      // Possíveis erros na cadastra_produto foram tratados na própria função
       cont_cadastros++;
       printf("\n");
       break;
@@ -346,6 +400,7 @@ int main() // Função principal, onde é exibida as opções de manipulação d
       else
       {
         lista_produtos(Lista_Prod, &erro);
+        // Possíveis erros na lista_produtos foram tratados na própria função
         printf("Listagem completa\n");
       }
       printf("\n");
@@ -354,6 +409,7 @@ int main() // Função principal, onde é exibida as opções de manipulação d
     case 3: // dá um lance em um produto
       printf("Resposta: 3\n");
       dar_lance(Lista_Prod, fila_usuario_geral, &erro);
+      // Possíveis erros na dar_lance foram tratados na própria função
       printf("\n");
       break;
 
@@ -366,6 +422,7 @@ int main() // Função principal, onde é exibida as opções de manipulação d
     case 5: // encerra leilão: lista os usuários e o lance ganhador para cada produto, além de reinicializar o sistema
       printf("Resposta: 5\n");
       encerra(Lista_Prod, &erro);
+      // Possíveis erros na encerra foram tratados na própria função
       printf("\n");
       break;
 
@@ -376,7 +433,11 @@ int main() // Função principal, onde é exibida as opções de manipulação d
   } while (comando != 5);
 
   libera_mem(Lista_Prod, &erro);
+  // Possíveis erros na libera_mem foram tratados na própria função
   fila_libera(fila_usuario_geral, &erro);
+  if(erro != SUCESSO){
+    printf("Erro ao liberar memória para a fila de usuários do lance\n");
+  }
 
   return 0;
 }

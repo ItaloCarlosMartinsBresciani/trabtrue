@@ -77,7 +77,7 @@ void avisa_usuario(Lista *Lista_Prod, Fila *fila_usuario_geral)
   }
 }
 
-void cadastra_produto(Lista *Lista_Prod)
+void cadastra_produto(Lista *Lista_Prod) //verificar se o produto já ta na lista ou não
 {
   printf("Entre com o nome do produto: ");
   char nome[50];
@@ -91,13 +91,12 @@ void cadastra_produto(Lista *Lista_Prod)
   }
   strcpy(produto, nome);
 
-  lista_push(Lista_Prod, produto);
-  printf("Produto cadastrado com sucesso!\n");
-
-  // Fila *aux_fila_usu = fila_init();
-
-  // ListaBloco *aux_bloco_lista = Lista_Prod->fim;
-  // aux_bloco_lista->fila_usu = aux_fila_usu;
+  int num = lista_push(Lista_Prod, produto);
+  if (num==SUCESSO){
+    printf("Produto cadastrado com sucesso!\n");
+  }else{
+    printf("Produto já cadastrado! Tente outra vez.\n");
+  }
 }
 
 int dar_lance(Lista *Lista_Prod, Fila *fila_usuario_geral)

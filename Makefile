@@ -1,22 +1,38 @@
+# Nome do executável
+EXEC = sistema_leilao.exe
+
+# Compilador
 CC = gcc
+
+# Flags de compilação
 CFLAGS = -Wall -g
-OBJ = fila.o lista.o pilha.o main.o
-DEPS = fila.h lista.h pilha.h erro.h
 
-programa: $(OBJ)
-	$(CC) -o $@ $(OBJ)
+# Arquivos objeto
+OBJ = main.o fila.o lista.o pilha.o
 
-main.o: main.c $(DEPS)
+# Regra padrão de compilação
+all: $(EXEC)
+
+# Regra para gerar o executável
+$(EXEC): $(OBJ)
+	$(CC) $(CFLAGS) -o $(EXEC) $(OBJ)
+
+# Compilar main
+main.o: main.c fila.h lista.h pilha.h erro.h
 	$(CC) $(CFLAGS) -c main.c
 
-fila.o: fila.c fila.h
+# Compilar fila
+fila.o: fila.c fila.h erro.h
 	$(CC) $(CFLAGS) -c fila.c
 
-lista.o: lista.c lista.h
+# Compilar lista
+lista.o: lista.c lista.h erro.h
 	$(CC) $(CFLAGS) -c lista.c
 
-pilha.o: pilha.c pilha.h
+# Compilar pilha
+pilha.o: pilha.c pilha.h erro.h
 	$(CC) $(CFLAGS) -c pilha.c
 
+# Limpeza de arquivos temporários
 clean:
-	rm -f *.o programa
+	rm -f $(OBJ) $(EXEC)

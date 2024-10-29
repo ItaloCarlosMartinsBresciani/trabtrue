@@ -368,8 +368,9 @@ int main() // Função principal, onde é exibida as opções de manipulação d
 
   do
   {
+    //printf("Caro usuário, suas opções são:\n\t1)  cadastrar um produto\n\t2)  listar produtos e lances\n\t3)  dar um lance\n\t4)  listar outros produtos para lances\n\t5)  encerrar leilão\n\n");
     printf("O que deseja fazer? ");
-    int resultado = scanf("%d", &comando);
+    int resultado = scanf("%d", &comando); //teste
 
     // Se scanf não conseguiu ler um inteiro (resultado == 0), exibe erro
     if (resultado != 1)

@@ -1,19 +1,14 @@
 # Nome do executável
 EXEC = sistema_leilao.exe
 
-# Compilador
 CC = gcc
 
-# Flags de compilação
 CFLAGS = -Wall -g
 
-# Arquivos objeto
 OBJ = main.o fila.o lista.o pilha.o
 
-# Regra padrão de compilação
 all: $(EXEC)
 
-# Regra para gerar o executável
 $(EXEC): $(OBJ)
 	$(CC) $(CFLAGS) -o $(EXEC) $(OBJ)
 
@@ -33,6 +28,6 @@ lista.o: lista.c lista.h erro.h
 pilha.o: pilha.c pilha.h erro.h
 	$(CC) $(CFLAGS) -c pilha.c
 
-# Limpeza de arquivos temporários
+# Limpeza de arquivos .o e .exe
 clean:
 	rm -f $(OBJ) $(EXEC)

@@ -307,6 +307,7 @@ void encerra(Lista *Lista_Prod, tipo_erro *erro) // Função para encerrrar o le
     aux = aux->proximo;
   }
   printf("Leilão encerrado.\n");
+  return;
 }
 
 void libera_mem(Lista *Lista_Prod, tipo_erro *erro) // Função para liberar a meméria da lista de produtos cadastrados (e as estruturas ligadas a ela)
@@ -315,7 +316,7 @@ void libera_mem(Lista *Lista_Prod, tipo_erro *erro) // Função para liberar a m
   while (l != NULL)
   {
     Pilha *p = l->pilha;
-    PilhaBloco *t = pilha_print_topo(l->pilha, erro);
+    PilhaBloco *t = p->topo;
     if (*erro != SUCESSO)
     {
       printf("Erro ao acessar pilha de lances ao liberar memória\n");
@@ -323,9 +324,9 @@ void libera_mem(Lista *Lista_Prod, tipo_erro *erro) // Função para liberar a m
     }
 
     while (t != NULL)
-    {
+    { // liberandos as filas dos blocos das pilhas
       Fila *f = t->fila;
-      fila_libera(f, erro);
+      fila_libera(f, erro); 
       if (*erro != SUCESSO)
       {
         printf("Erro ao acessar lista de usuários de um lance na liberação de memória\n");
@@ -354,7 +355,7 @@ void libera_mem(Lista *Lista_Prod, tipo_erro *erro) // Função para liberar a m
 int main() // Função principal, onde é exibida as opções de manipulação do Leilão
 {
   setlocale(LC_ALL, "");
-  printf("Caro usuário, suas opções são:\n\t1)  cadastrar um produto\n\t2)  listar produtos e lances\n\t3)  dar um lance\n\t4)  listar outros produtos para lances\n\t5)  encerrar leilão\n\n");
+  printf("Caro usuário, suas opções são:\n\t1)  cadastrar um produto\n\t2)  listar produtos e lances\n\t3)  dar um lance\n\t4)  listar outros produtos para lances\n\t5)  encerrar leilão\n\t6)  sair do programa\n\n");
   tipo_erro erro = SUCESSO; // variável controladora de erros
   int comando;
   int cont_cadastros = 0;
@@ -368,17 +369,14 @@ int main() // Função principal, onde é exibida as opções de manipulação d
 
   do
   {
-    //printf("Caro usuário, suas opções são:\n\t1)  cadastrar um produto\n\t2)  listar produtos e lances\n\t3)  dar um lance\n\t4)  listar outros produtos para lances\n\t5)  encerrar leilão\n\n");
     printf("O que deseja fazer? ");
-    int resultado = scanf("%d", &comando); //teste
-
+    int resultado = scanf("%d", &comando);
     // Se scanf não conseguiu ler um inteiro (resultado == 0), exibe erro
     if (resultado != 1)
     {
       printf("Comando inválido!\n");
       printf("\n");
-      while (getchar() != '\n')
-        ;       // Remove qualquer caractere extra deixado no buffer
+      while (getchar() != '\n');       // Remove qualquer caractere extra deixado no buffer
       continue; // Volta para o começo do do while
     }
 
@@ -396,10 +394,14 @@ int main() // Função principal, onde é exibida as opções de manipulação d
       printf("Resposta: 2\n");
       if (cont_cadastros == 0)
       {
-        printf("Não há produtos cadastrados\n");
+        printf("Não há produtos cadastrados no leilão.\n");
       }
       else
       {
+        if(Lista_Prod->inicio == NULL){
+          printf("Não há produtos cadastrados no leilão.\n");
+          break;
+        }
         lista_produtos(Lista_Prod, &erro);
         // Possíveis erros na lista_produtos foram tratados na própria função
         printf("Listagem completa\n");
@@ -423,18 +425,41 @@ int main() // Função principal, onde é exibida as opções de manipulação d
     case 5: // encerra leilão: lista os usuários e o lance ganhador para cada produto, além de reinicializar o sistema
       printf("Resposta: 5\n");
       encerra(Lista_Prod, &erro);
+      
+      fila_libera(fila_usuario_geral, &erro);
+      
+      libera_mem(Lista_Prod, &erro);
+      
+      if (erro != SUCESSO)
+      {
+        printf("Erro ao liberar memória para a fila de usuários do lance.\n");
+      }
+      // Inicializando novamente para possíveis leilões seguintes
+      Lista_Prod = lista_init(&erro);
+      if (erro != SUCESSO)
+      {
+        printf("Erro ao inicializar a lista.\n");
+      }
+      fila_usuario_geral = fila_init(&erro);
+      
+      cont_cadastros = 0;
       // Possíveis erros na encerra foram tratados na própria função
       printf("\n");
+      break;
+
+    case 6:
+      printf("Resposta: 6\n");
+      printf("Encerrando o programa...\n");
       break;
 
     default:
       printf("Comando inválido\n");
       break;
     }
-  } while (comando != 5);
+  } while (comando != 6);
+
 
   libera_mem(Lista_Prod, &erro);
-  // Possíveis erros na libera_mem foram tratados na própria função
   fila_libera(fila_usuario_geral, &erro);
   if(erro != SUCESSO){
     printf("Erro ao liberar memória para a fila de usuários do lance\n");

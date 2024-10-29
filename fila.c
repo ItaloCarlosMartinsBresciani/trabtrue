@@ -31,9 +31,10 @@ bool fila_vazia(Fila *f, tipo_erro *erro) //tem que mudar para bool
         *erro = SUCESSO;
         return true;
     }
-    else
+    else{
         *erro = SUCESSO;
         return false;
+    }
 }
 void fila_push(Fila *f, elem_fila *dado, tipo_erro *erro) //Adiciona uma elemento na fila
 {

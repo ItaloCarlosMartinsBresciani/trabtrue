@@ -3,7 +3,6 @@
 #ifndef ERRO_H
 #define ERRO_H
 
-
 typedef enum{
     SUCESSO, // Operação executada com sucesso (0)
     ERRO_ALLOC, // Erro de alocação de memória (1)
@@ -12,7 +11,5 @@ typedef enum{
     ERRO_POP_VAZIO, // Tentativa de retirar elemento em uma estrutura vazia (4)
     ERRO_DEALLOC // Erro ao desalocar memória (5)
 }tipo_erro;
-
-
 
 #endif // ERRO_H
